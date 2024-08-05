@@ -1,0 +1,64 @@
+[
+    {
+        "image": "img/main/toy1.jpeg",
+        "title": "Horse",
+        "description": "An amazing pink Unicorn",
+        "price": "9,99"
+    },
+    {
+        "image": "img/main/toy2.jpeg",
+        "title": "rubber",
+        "description": "An amazing rubber bubble",
+        "price": "9,99"
+    },
+    {
+        "image": "img/main/toy3.jpeg",
+        "title": "cars",
+        "description": "An amazing car collection",
+        "price": "9,99"
+    },
+    {
+        "image": "img/main/toy4.jpeg",
+        "title": "dolls",
+        "description": "An amazing house of dolls",
+        "price": "9,99"
+    },
+    {
+        "image": "img/main/toy5.jpeg",
+        "title": "teddy bear",
+        "description": "An amazing teddy",
+        "price": "9,99"
+    },
+    {
+        "image": "img/main/toy6.jpeg",
+        "title": "micky",
+        "description": "An amazing micky doll",
+        "price": "9,99"
+    },
+    {
+        "image": "img/main/toy7.jpeg",
+        "title": "Sky cars",
+        "description": "An amazing sky cars",
+        "price": "9,99"
+    },
+    {
+        "image": "img/main/toy8.jpeg",
+        "title": "panda car",
+        "description": "An amazing panda vehicle",
+        "price": "9,99"
+    },
+    {
+        "image": "img/main/toy9.jpeg",
+        "title": "wild animals",
+        "description": "An amazing wild animal kit",
+        "price": "9,99"
+    },
+    {
+        "image": "img/main/toy10.jpeg",
+        "title": "catcachan",
+        "description": "An amazing catcachan",
+        "price": "9,99"
+    }
+]
+
+

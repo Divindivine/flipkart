@@ -1,40 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini flipkart</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-
-</head>
-<body>
-    <!-- <script>
-        let companies = `[
-    {
-        "name": "big corparation",
-        "numberofemployees": 10000,
-        "ceo": "Mary",
-        "rating": 3.6
-    },
-    {
-        "name": "small startup",
-        "numberofemployees": 3,
-        "ceo": null,
-        "rating": 4.3
-    }
-]`
-console.log(JSON.parse(companies)[1].name);
-    </script> -->
-    <!-- <button onclick="hai()" class="button1">click here</button>
-    <button id="kick">click here too</button> -->
-    
-    <!-- <button id="mybutton">Click me</button>
-    <textarea name="" rows="8" id="mytext"></textarea> -->
-    <h2>Mini Flipkart</h2>
-    
-    <div class="products"></div>
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mobiles- Buy Products Online at Best Price in India - All...</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="whole">
+      <div class="header-div">
+        <header>
+          <div class="header-spacer"></div>
+          <div class="header-div-inner">
+            <div class="flipkart-logo">
+              <div class="flipkart-logo-inner">
+                <a href="">
+                  <img id="flipkartlogo" alt="" />
+                </a>
+                <a id="under-logo" href="">
+                  <span id="underlogo1"></span>
+                  <span id="underlogo2"></span>
+                  <img id="underlogo3" alt="" />
+                </a>
+              </div>
+            </div>
+            <div class="search-field">
+              <div class="search-bar">
+                <div class="searchbar-inner">
+                  <div class="searchbar-inner-part1">
+                    <input id="search_input" type="text" placeholder="" />
+                  </div>
+                  <button class="searchbar-inner-part2">
+                    <img id="searchlense" alt="" />
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="head-item login-field">
+              <div class="login-field-inner">
+                <a id="logindef" href=""></a>
+              </div>
+            </div>
+            <div class="head-item">
+              <a id="first-li" href="">
+                <span id="firstlidef"></span>
+              </a>
+            </div>
+            <div class="head-item">
+              <div class="head-item-inner">
+                <span id="secondlidef"></span>
+                <img id="secondlidef_downarrow" src="" alt="" />
+              </div>
+            </div>
+            <div class="head-item">
+              <div class="head-item-inner">
+                <img id="cartlogo" src="" alt="" />
+                <span id="thirdlidef"></span>
+              </div>
+            </div>
+          </div>
+          <div class="header-spacer"></div>
+        </header>
+      </div>
+      <div class="section-div">
+        <div class="nav-items">
+          <div class="nav-item-inner"></div>
+        </div>
+      </div>
+      <div class="main-body">
+        <div class="main-body-inner">
+          <div class="left-main">
+            <div class="left-main-inner">
+              <div class="left-main-content">
+                <div class="left-main-inner-first">
+                  <section class="filtersec">
+                    <div class="filtersec-in">
+                      <span id="filterdef">Filters</span>
+                    </div>
+                  </section>
+                  <div class="categorysec">
+                    <div class="categorysec-in">
+                      <div class="categorysec-first">
+                        <span>CATEGORIES</span>
+                      </div>
+                      <div class="categorysec-second">
+                        <img
+                          id="mobileleftarrow"
+                          src="img/left-main/left-main-arrow.svg"
+                          alt=""
+                        />
+                        <a id="mobilenacc" href="">Mobiles & Accessories</a>
+                      </div>
+                      <div class="categorysec-third">
+                        <a href="" id="mobiledef">Mobiles</a>
+                      </div>
+                    </div>
+                  </div>
+                  <section class="pricesec">
+                    <div class="pricesec-part1">
+                      <span id="pricedef">Price</span>
+                    </div>
+                    <div class="pricesec-part2">
+                      <div class="range-field">
+                        <div class="rang"></div>
+                      </div>
+                    </div>
+                    <div class="pricesec-part3"></div>
+                    <div class="pricesec-part4"></div>
+                  </section>
+                  <section class="brandsec"></section>
+                  <section class="assuredsec"></section>
+                  <section class="ratingsec"></section>
+                </div>
+              </div>
+              <div class="left-main-content">
+                <a class="left-main-inner-second"></a>
+              </div>
+            </div>
+          </div>
+          <div class="right-main"></div>
+        </div>
+      </div>
+    </div>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
+
+

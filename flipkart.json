@@ -1,0 +1,63 @@
+{
+    "headeritems":{
+        "flipkartlogo": "img/header/whiteflipkart.png",
+        "underlogo1": "Explore",
+        "underlogo2": "Plus",
+        "underlogo3": "img/header/flipkartplus.png",
+        "search_input": "Search for products, brands and more",
+        "searchlense": "img/header/flipsearchlense.svg",
+        "logindef": "Login",
+        "firstlidef": "Become a Seller",
+        "secondlidef": "More",
+        "secondlidef_downarrow": "img/header/secondlidefdownarrow.svg",
+        "cartlogo": "img/header/cart.svg",
+        "thirdlidef": "Cart"
+    },
+
+    "navitems":[
+        {
+            "navlistdef": "Electronics",
+            "navdownarrow": "img/nav/nav-down-arrow.svg"
+        },
+
+        {
+            "navlistdef": "TVs & Appliances",
+            "navdownarrow": "img/nav/nav-down-arrow.svg"
+        },
+        
+        {
+            "navlistdef": "Men",
+            "navdownarrow": "img/nav/nav-down-arrow.svg"
+        },
+
+        {
+            "navlistdef": "Women",
+            "navdownarrow": "img/nav/nav-down-arrow.svg"
+        },
+
+        {
+            "navlistdef": "Baby & Kids",
+            "navdownarrow": "img/nav/nav-down-arrow.svg"
+        },
+
+        {
+            "navlistdef": "Home & Furniture",
+            "navdownarrow": "img/nav/nav-down-arrow.svg"
+        },
+
+        {
+            "navlistdef": "Sports, Books & More",
+            "navdownarrow": "img/nav/nav-down-arrow.svg"
+        },
+
+        {
+            "navlistdef": "Flights",
+            "navdownarrow": "img/nav/nav-down-arrow.svg"
+        },
+
+        {
+            "navlistdef": "Offer Zone",
+            "navdownarrow": "img/nav/nav-down-arrow.svg"
+        }
+    ]
+}

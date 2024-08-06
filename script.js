@@ -191,30 +191,84 @@
 //         });
 //     });
 // });
-let http =  new XMLHttpRequest();
-http.open('get', 'products.json', true);
-http.send();
-http.onload = function(){
-    if(this.readyState == 4 && this.status == 200){
-        let products = JSON.parse(this.responseText);
-        let output = "";
-        for(let item of products){
-            output +=
-            `
-            <div class= "product">
-            <img src="${item.image}"  alt="${item.image}">
-            <p class="title">${item.title}</p>
-            <p class="description">${item.description}</p>
-            <p class="price">
-                <span>${item.price}</span>
-                <span>&euro;</span>
-           </p>
-        </div>
-        `;
-        }
-        document.querySelector(".products").innerHTML = output;
-    }
+// let http =  new XMLHttpRequest();
+// http.open('get', 'flipkart.json', true);
+// http.send();
+// http.onload = function(){
+//     if(this.readyState == 4 && this.status == 200){
+//         let products = JSON.parse(this.responseText);
+//         let output = "";
+//         for(let item of products){
+//             output +=
+//             `
+//             <div class= "product">
+//             <img src="${item.image}"  alt="${item.image}">
+//             <p class="title">${item.title}</p>
+//             <p class="description">${item.description}</p>
+//             <p class="price">
+//                 <span>${item.price}</span>
+//                 <span>&euro;</span>
+//            </p>
+//         </div>
+//         `;
+//         }
+//         document.querySelector(".products").innerHTML = output;
+//     }
+// }
+
+fetch('flipkart.json')
+.then(response =>response.json())
+.then(
+   (data)=>{
+      header(data.headeritems);
+      naviteminner(data.navitems);
+   }
+)
+.catch(err =>{
+    console.log('error:',err);
+})
+
+function header(data){
+   var fliplogo = document.getElementById("flipkartlogo");
+   var undlogo1 = document.getElementById("underlogo1");
+   var undlogo2 = document.getElementById("underlogo2");
+   var undlogo3 = document.getElementById("underlogo3");
+   var searchinp = document.getElementById("search_input");
+   var searchlen = document.getElementById("searchlense");
+   var logdef = document.getElementById("logindef");
+   var firstdef = document.getElementById("firstlidef");
+   var secdef = document.getElementById("secondlidef");
+   var downarrow = document.getElementById("secondlidef_downarrow");
+   var cart = document.getElementById("cartlogo");
+   var thirddef = document.getElementById("thirdlidef");
+
+   fliplogo.src = data.flipkartlogo;
+   undlogo1.innerText = data.underlogo1;
+   undlogo2.innerText = data.underlogo2;
+   undlogo3.src = data.underlogo3;
+   searchinp.placeholder = data.search_input;
+   searchlen.src = data.searchlense;
+   logdef.innerText = data.logindef;
+   firstdef.innerText = data.firstlidef;
+   secdef.innerText = data.secondlidef;
+   downarrow.src = data.secondlidef_downarrow;
+   cart.src = data.cartlogo;
+   thirddef.innerText = data.thirdlidef;
 }
 
+function naviteminner(data){
+   console.log(data);
+   let output = "";
+   for(let item of data){
+      output +=
+      `
+      <span id = "nav-list-item">
+         ${item.navlistdef}
+         <img src="${item.navdownarrow}">
+      </span>
 
+      `;
+   }
+   document.querySelector(".nav-item-inner").innerHTML = output;
+}
 

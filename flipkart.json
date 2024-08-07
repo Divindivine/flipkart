@@ -59,5 +59,26 @@
             "navlistdef": "Offer Zone",
             "navdownarrow": "img/nav/nav-down-arrow.svg"
         }
+    ],
+    "sortitems":[
+        {
+            "sortitemsdef": "Relevance"
+        },
+
+        {
+            "sortitemsdef": "Popularity"
+        },
+
+        {
+            "sortitemsdef": "Price -- Low to High"
+        },
+
+        {
+            "sortitemsdef": "Price -- High to Low"
+        },
+
+        {
+            "sortitemsdef": "Newest First"
+        }
     ]
 }

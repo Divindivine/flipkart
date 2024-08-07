@@ -102,13 +102,69 @@
                     </div>
                     <div class="pricesec-part2">
                       <div class="range-field">
-                        <div class="rang"></div>
+                        <div class="range-units"></div>
+                        <div class="range-units"></div>
+                        <div class="range-units"></div>
+                        <div class="range-units"></div>
+                        <div class="range-units"></div>
                       </div>
                     </div>
-                    <div class="pricesec-part3"></div>
-                    <div class="pricesec-part4"></div>
+                    <div class="pricesec-part3">
+                      <div class="scale">
+                        <div class="start-point">
+                          <div class="point-inner"></div>
+                        </div>
+                        <div class="end-point">
+                          <div class="point-inner"></div>
+                        </div>
+                        <div class="meter-small-line"></div>
+                        <div class="meter-line"></div>
+                      </div>
+                      <div class="dot-scale">
+                        <div class="dot-units">.</div>
+                        <div class="dot-units">.</div>
+                        <div class="dot-units">.</div>
+                        <div class="dot-units">.</div>
+                        <div class="dot-units">.</div>
+                        <div class="dot-units">.</div>
+                      </div>
+                    </div>
+                    <div class="pricesec-part4">
+                      <div class="minsec">
+                        <select class="minsec-inner">
+                          <option value="Min" class="minoption">Min</option>
+                          <option value="10000" class="minoption">₹10000</option>
+                          <option value="15000" class="minoption">₹15000</option>
+                          <option value="20000" class="minoption">₹20000</option>
+                          <option value="30000" class="minoption">₹30000</option>
+                        </select>
+                      </div>
+                      <div class="tosec">
+                        <span>to</span>
+                      </div>
+                      <div class="maxsec">
+                        <select class="maxsec-inner">
+                          <option value="10000" class="maxoption">₹10000</option>
+                          <option value="15000" class="maxoption">₹15000</option>
+                          <option value="20000" class="maxoption">₹20000</option>
+                          <option value="30000" class="maxoption">₹30000</option>
+                          <option value="Max" class="maxoption">₹30000+</option>
+                        </select>
+                      </div>
+                    </div>
                   </section>
-                  <section class="brandsec"></section>
+                  <section class="brandsec">
+                    <div class="brand-header">
+                      <div class="brand-def">
+                        <span>Brand</span>
+                      </div>
+                      <img id="brand_arrow" src="img/left-main/left-main-arrow.svg" alt="">
+                    </div>
+                    <div class="brand-body">
+                      <div class="brand-body-main"></div>
+                      <div class="brand-body-foot"></div>
+                    </div>
+                  </section>
                   <section class="assuredsec"></section>
                   <section class="ratingsec"></section>
                 </div>
@@ -118,7 +174,109 @@
               </div>
             </div>
           </div>
-          <div class="right-main"></div>
+          <div class="right-main">
+<!-- fromhere js -->
+
+            <div class="right-main-head">
+              <div class="right-main-head-in">
+                <div class="right-main-head-inner">
+                  <div class="right-head-first">
+                    <div class="page-path">
+                      <a id="pathway" href="">Home</a>
+                      <img id="patharrow" src="img/right-main/right-body-head-arrow.svg" alt="">
+                    </div>
+                    <div class="page-path">
+                      <a id="pathway" href="">Mobiles and accessories</a>
+                      <img id="patharrow" src="img/right-main/right-body-head-arrow.svg" alt="">
+                    </div>
+                    <div class="page-path">
+                      <a id="pathway" href="">Mobiles</a>
+                    </div>
+                  </div>
+                  <span class="right-head-second">
+                    Showing 1 – 24 of 9,941 results for "<span id="pagekey">mobiles</span>"
+                  </span>
+                  <div class="right-head-third">
+                    <div class="sortspan">Sort By</div>
+                    <div class="right-main-body">
+                      <div class="main-elemsec">
+                        <div class="mainsec-elemin">
+                           <div class="elem-inner">
+                              <a class="elem-link>
+                                 <div class="elem-img">
+                                    <div class="elem-img-1">
+                                       <img src="${item.images[0]}>
+                                    </div>
+                                    <div class="elem-img-2">
+                                       <label class= "checkboxdiv">
+                                          <input type="checkbox" class="checkboxinput" readonly>
+                                          <div class="whitebox"</div>
+                                       </label>
+                                       <label class="comparedef">
+                                          <span>Add to Compare</span>
+                                       </label>
+                                    </div>
+                                    <div class="elem-img-3">
+                                       <img src="img/right-main/like.svg">
+                                    </div>
+                                 </div>
+                                 <div class="elem-def">
+                                    <div class="elem-def-part1">
+                                       <span class= "name-field">${item.title}</span>
+                                       <div class= "rating-section">
+                                          <span class= "star-rating">
+                                             ${item.rating.average}
+                                             <img src= "img/right-main/star.svg">
+                                          </span>
+                                          <span class= "ratingnreview">
+                                             <span>${item.rating.count}</span>
+                                             <span>&</span>
+                                             <span>${item.rating.reviewCount}</span>
+                                          </span>
+                                       </div>
+                                       <div class= "spec">
+                                          <ul class= "spec-in">
+                                             ${listiterator(items.highlights)}
+                                          </ul>
+                                       </div>
+                                    </div>
+                                    <div class="elem-def-part2">
+                                       <div class="pricepart>
+                                          <div class="pricepart1>
+                                             <span class="originalprice">
+                                                ${item.price}
+                                             </span>
+                                             <span class= "previousprice">
+                                                ₹${item.mrp}
+                                             </span>
+                                             <span class= "offer">
+                                                 off
+                                             </span>
+                                             <div>
+                                          </div>
+                                           <div class="pricepart2>
+                                          </div>
+                                       </div>
+                                       <div class="flipkartassured">
+                                       </div>
+                                       <div class="exclusive">
+                                       </div>
+                                       <div class="exclusive">
+                                       </div>
+                                    </div>
+                                 </div>
+                              </a>
+                           </div>
+                        </div>
+                     </div>  
+                     <!-- upto here for js -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+          </div>
         </div>
       </div>
     </div>

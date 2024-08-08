@@ -22,7 +22,6 @@
 
 html,body{
   width: 100%;
-  overflow: hidden;
   font-family: main;
   background-color: #f1f3f6;
   font-weight: 400;
@@ -744,23 +743,23 @@ header{
   font-weight: 500;
 }
 
-.right-main-body{
-  width: 100%;
-}
-
-.main-elemsec{
+.right-main-elem{
   display: block;
   width: 100%;
 }
 
-.mainsec-elemin{
-  align-items: stretch;
-  background: #fff;
-  background-color: #fff;
+.right-main-elemin{
   display: flex;
+  align-items: stretch;
+  background: white;
+  background-color: white;
 }
 
-.elem-inner{
+.right-main-elem-inner{
+  width: 100%;
+}
+
+.right-main-elem-div{
   line-height: 14px;
   padding: 24px 0 30px 24px;
   display: block;
@@ -768,26 +767,30 @@ header{
   border-bottom: 1px solid #f0f0f0;
 }
 
-.elem-link{
+.right-main-elem-link{
   display: flex;
   position: relative;
   text-decoration: none;
 }
 
-.elem-img{
+.elem-left{
   position: relative;
   width: 200px;
 }
 
-.elem-img-1{
+.elem-left-first{
   position: relative;
   display: block;
+}
+
+.elem-left-first-inner{
   height: 200px;
   width: 200px;
+  position: relative;
   margin: 0 auto;
 }
 
-.elem-img-1 img{
+#mobilepic{
   position: absolute;
   bottom: 0;
   left: 0;
@@ -799,45 +802,45 @@ header{
   max-height: 100%;
 }
 
-.elem-img-2{
+.elem-left-second{
   display: block;
   margin-top: 16px;
 }
 
-.checkboxdiv{
-  cursor: pointer;
+.elem-left-second-in{
+  vertical-align: middle;
+}
+
+.forbox{
+  display: inline-block;
+}
+
+.boxlabel{
   width: 100%;
   position: relative;
   display: block;
 }
 
-.checkboxinput{
-  visibility: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.whitebox{
+.forcompinput{
   position: relative;
   width: 14px;
   height: 14px;
   background-color: transparent;
   border: 1.4px solid #c2c2c2;
-  border: 1.5px;
   display: inline-block;
   vertical-align: middle;
+  cursor: pointer;
 }
 
-.comparedef{
+.forcompare{
   vertical-align: middle;
   margin-left: 8px;
   font-size: 14px;
   color: #212121;
-  cursor: pointer;
+
 }
 
-.elem-img-3{
+.elem-left-third{
   position: absolute;
   display: inline-block;
   top: 2px;
@@ -845,38 +848,44 @@ header{
   cursor: pointer;
 }
 
-.elem-img-3 img{
-  width: 16px;
-  height: 16px;
-  color: #c2c2c2;
+.elem-left-third-in{
+  position: relative;
+  display: inline-flex;
 }
 
-.elem-def{
+.elem-left-third-in img{
+  width: 16px;
+  height: 16px;
+}
+
+.elem-right{
   padding-left: 25px;
   width: calc(100% - 200px);
   display: flex;
   flex-flow: row wrap;
 }
 
-.elem-def-part1{
+.elem-right-left{
   width: 58.33%;
   display: inline-block;
   vertical-align: top;
 }
 
 .name-field{
+  color: black;
   font-weight: 500;
   font-size: 18px;
   display: block;
-  cursor: pointer;
 }
 
-.rating-section{
+.rating-field{
   margin-top: 6px;
 }
 
-.star-rating{
+#starrating{
   position: relative;
+}
+.star-rating-inner{
   line-height: normal;
   display: inline-block;
   color: #fff;
@@ -886,74 +895,68 @@ header{
   font-size: 12px;
   vertical-align: middle;
   background-color: #388e3c;
-
 }
 
-.star-rating img{
+.star-rating-inner img{
   margin: 2px 0 0 2px;
   height: 10px;
+  text-decoration: none;
 }
 
-.ratingnreview{
+#ratingnreview{
   padding-left: 8px;
   font-weight: 500;
   color: #878787;
 }
 
-.spec{
+#ratingand{
+  color: #878787;
+}
+
+.spec-field{
   margin-top: 13px;
 }
 
-.spec-in{
+.specfieldinner{
   margin-top: 5px;
   color: #212121;
   line-height: 22px;
   display: table;
 }
 
-.spec-items{
+#specitems{
   display: table-row;
   list-style: none;
 }
 
-.spec-items::before{
+#specitems::before{
   content: "•";
   color: #c2c2c2;
   padding-right: 8px;
   display: table-cell;
 }
 
-.elem-def-part2{
+.elem-right-right{
   padding-left: 25px;
   width: 41.66%;
   display: inline-block;
   vertical-align: top;
 }
 
-.pricepart{
+.elem-right-right-first{
   display: inline-block;
   margin-top: -1px;
   padding-right: 10px;
 }
 
-.flipkartassured{
-  display: inline-block;
-  vertical-align: middle;
-  padding-bottom: 4px;
-}
-
-.exclusive{
-  margin-top: 5px;
-}
-
-.originalprice{
+.pricearea{
   font-size: 25px;
   display: block;
   font-weight: 500;
   color: #212121;
 }
 
-.previousprice{
+.mrparea{
   padding-top: 10px;
   margin-left: 0;
   display: inline-block;
@@ -962,7 +965,7 @@ header{
   color: #878787;
 }
 
-.offfer{
+.aboutoffer{
   color: #388e3c;
   font-size: 13px;
   letter-spacing: -0.2px;
@@ -971,8 +974,45 @@ header{
   margin-left: 8px;
 }
 
-.pricepart2{
+.aboutdelivery{
   margin: 6px 0 0;
   font-size: 14px;
   line-height: 16px;
+}
+
+.aboutdelivery-inner{
+  color: rgb(0, 0, 0);
+  font-size: 12px;
+  font-weight: 400;
+  display: inline-flex;
+  white-space: pre-wrap;
+}
+
+.elem-right-right-second{
+  display: inline-block;
+  vertical-align: top;
+  font-size: 0;
+  margin-left: 0;
+}
+
+.elem-right-right-second img{
+  height: 21px;
+}
+
+.elem-right-right-third{
+  margin-top: 5px;
+}
+
+.elem-right-right-third-inner{
+  display: inline-block;
+}
+
+#saverdeal{
+  color: rgb(112, 72, 198);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  display: inline-flex;
+  vertical-align: middle;
+  white-space: pre;
 }

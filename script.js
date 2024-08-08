@@ -1,3 +1,9 @@
+var mainarr = [];
+function copyAPI(apidata){
+  apidata.forEach(element => {
+    mainarr.push(element);
+  });
+}
 function fetchingdata(){
     const apiUrl = 'https://real-time-flipkart-api.p.rapidapi.com/products-by-category?category_id=tyy%2C4io&page=1&sort_by=popularity';
     const apiOptions = {
@@ -12,11 +18,13 @@ function fetchingdata(){
     .then(response =>response.json())
     .then((apiData)=>{
       mainbodybuilding(apiData.products);
+      copyAPI(apiData.products);
        }
     )
     .catch(err =>{
-        console.log('error:',err)
+        console.log('error:',err);
     })
+    
  /*////////////////////////////////// */
 
 
@@ -27,7 +35,8 @@ fetch("flipkart.json")
     naviteminner(data.navitems);
     sortarea(data.sortitems);
     sortdefaultselected();
-    sortselection();
+    sortbyworking();
+    minmaxadjust();
   })
   .catch((err) => {
     console.log("error:", err);
@@ -91,26 +100,188 @@ function sortarea(data){
 }
 
 function sortdefaultselected(){
-   const sortitmes = document.querySelector('.right-head-third');
-   const currentactive = sortitmes.children[1];
+   const sortitems = document.querySelector('.right-head-third');
+   const currentactive = sortitems.children[1];
    currentactive.classList.add('selected-sort')
-   console.log(currentactive);
 }
+
+
+function sortbyworking(){
+  let elements = document.getElementsByClassName("sortitems");
+  for(let items of elements){
+    items.addEventListener('click',sortaction);
+  } 
+}
+
+function sortaction(event){
+  const prev = document.querySelector('.selected-sort');
+  prev.classList.remove('selected-sort');
+  event.target.classList.add('selected-sort');
+  sortmainbysortby(event.target.innerText);
+}
+
+function sortmainbysortby(content){
+  if(content === "Relevance"){
+    mainbodybuilding(mainarr);
+  }
+  else if(content === "Popularity"){
+    let measureunit = [...mainarr];
+    measureunit.sort((a,b)=>b.rating.count - a.rating.count);
+    mainbodybuilding(measureunit);
+  }
+  else if(content === "Price -- Low to High"){
+    let measureunit = [...mainarr];
+    measureunit.sort((a,b)=>a.price - b.price);
+    mainbodybuilding(measureunit);
+  }
+  else if(content === "Price -- High to Low"){
+    let measureunit = [...mainarr];
+    measureunit.sort((a,b)=>b.price - a.price);
+    mainbodybuilding(measureunit);
+  }
+  else if(content === "Newest First"){
+    let measureunit = [...mainarr];
+    measureunit.sort((a,b)=>a.rating.count - b.rating.count);
+    mainbodybuilding(measureunit);
+  }
+}
+
 
 function mainbodybuilding(apidata){
    let output = "";
    for(let item of apidata){
-      output +=``
+      output +=`
+     <div class="right-main-elem">
+              <div class="right-main-elemin">
+                <div class="right-main-elem-inner">
+                  <div class="right-main-elem-div">
+                    <a href="" class="right-main-elem-link">
+                      <div class="elem-left">
+                        <div class="elem-left-first">
+                          <div class="elem-left-first-in">
+                            <div class="elem-left-first-inner">
+                              <img
+                                id="mobilepic"
+                                src="${item.images[0]}"
+                                alt=""
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="elem-left-second">
+                          <div class="elem-left-second-in">
+                            <span class="forbox">
+                              <label for="" class="boxlabel">
+                                <input type="checkbox" class="forcompinput" />
+                              </label>
+                            </span>
+                            <label for="" class="forcompare">
+                              <span>Add to Compare</span>
+                            </label>
+                          </div>
+                        </div>
+                        <div class="elem-left-third">
+                          <div class="elem-left-third-in">
+                            <img src="img/right-main/like.svg" alt="" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="elem-right">
+                        <div class="elem-right-left">
+                          <div class="name-field">
+                            <span id="phone-name">${item.title}</span>
+                          </div>
+                          <div class="rating-field">
+                            <span id="starrating">
+                              <div class="star-rating-inner">
+                                <span id="starratingno">${item.rating.average}</span>
+                                <img src="img/right-main/star.svg" alt="">
+                              </div>
+                            </span>
+                            <span id="ratingnreview">
+                              <span>
+                                <span id="noofratings">${item.rating.count} Ratings</span>
+                                <span id="ratingand">&</span>
+                                <span id="noofreviews">${item.rating.reviewCount} Reviews</span>
+                              </span>
+                            </span>
+                          </div>
+                          <div class="spec-field">
+                            <ul class="specfieldinner">
+                              ${specbulider(item.highlights)}
+                            </ul>
+                          </div>
+                        </div>
+                        <div class="elem-right-right">
+                          <div class="elem-right-right-first">
+                            <div class="sectionprice">
+                              <div class="pricearea">
+                                <span id="priceamount">₹${item.price}</span>
+                              </div>
+                              <div class="mrparea">
+                                <span>₹<span id="mrpamount">${item.mrp}</span></span>
+                              </div>
+                              <div class="aboutoffer">
+                                <span id="offerdef">${offercalc(item.price,item.mrp)}% off</span>
+                              </div>
+                            </div>
+                            <div class="aboutdelivery">
+                              <div>
+                                  <div class="aboutdelivery-inner">
+                                    <span>Free delivery</span>
+                                  </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="elem-right-right-second">
+                            <img src="img/right-main/filpassure.png" alt="">
+                          </div>
+                          <div class="elem-right-right-third">
+                            <div class="elem-right-right-third-inner">
+                              <span id="saverdeal">Saver Deal</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div> 
+      `;
    }
+
+   function specbulider(spec){
+      let output = "";
+      for(let item of spec){
+        output += `
+        <li id="specitems">
+          <span id="specitemsdef">${item}</span>
+        </li>
+        `
+      }
+    return output;
+   }
+
+
+   function offercalc(small,big){
+     let ans = ((big - small)/big) * 100;
+     return Math.round(ans);
+   }
+
+
+   document.querySelector(".forjs").innerHTML = output;
+}
+
+function minmaxadjust(){
+  var min = document.getElementsByClassName('minsec-inner');
+  min[0].addEventListener('click',minmaxaction);
+  var firstmin = min[0].value;
+  var max = document.getElementsByClassName('maxsec-inner');
+  max[0].addEventListener('click',minmaxaction);
+  var firstmax = max[0].value;
+  console.log(firstmin);
+  console.log(firstmax);
 }
 
 
-Typing      : [29Wpm][51%]
-Focus       : [9hr 43min][548hr 58min]
-CT          : [9hr 41min][590hrs 34min]
-ACT         : [9hr 06min][513hr 12min]
-HTML        : [165][12134]
-CSS         : [483][12620]
-JS          : [105][11497]
-Total       : [622][34966]
-days        : #3

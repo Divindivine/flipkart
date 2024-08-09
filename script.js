@@ -1,49 +1,31 @@
-var mainarr = [];
-function copyAPI(apidata){
-  apidata.forEach(element => {
-    mainarr.push(element);
-  });
-}
-function fetchingdata(){
-    const apiUrl = 'https://real-time-flipkart-api.p.rapidapi.com/products-by-category?category_id=tyy%2C4io&page=1&sort_by=popularity';
-    const apiOptions = {
-        method: 'GET',
-        headers: {
-            'x-rapidapi-key': 'fe94acbef1msh718df993fe679f9p1daa48jsn546c852425cf',
-            'x-rapidapi-host': 'real-time-flipkart-api.p.rapidapi.com'
-        }
-    };
-    /*////////////////////////////////// */
-    fetch(apiUrl, apiOptions)
-    .then(response =>response.json())
-    .then((apiData)=>{
-      mainbodybuilding(apiData.products);
-      copyAPI(apiData.products);
-       }
-    )
-    .catch(err =>{
-        console.log('error:',err);
+function fetchingdata() {
+  fetch("flipkart.json")
+    .then((response) => response.json())
+    .then((data) => {
+      header(data.headeritems);
+      naviteminner(data.navitems);
+      sortarea(data.sortitems);
+      mainbodybuilding(data.products);
+      copyData(data.products);
+      sortdefaultselected();
+      sortbyworking();
     })
-    
- /*////////////////////////////////// */
-
-
-fetch("flipkart.json")
-  .then((response) => response.json())
-  .then((data) => {
-    header(data.headeritems);
-    naviteminner(data.navitems);
-    sortarea(data.sortitems);
-    sortdefaultselected();
-    sortbyworking();
-    minmaxadjust();
-  })
-  .catch((err) => {
-    console.log("error:", err);
-  });
+    .catch((err) => {
+      console.log("error:", err);
+    });
 }
 
 fetchingdata();
+
+var mainarr = [];
+function copyData(data) {
+  data.forEach((element) => {
+    mainarr.push(element);
+  });
+}
+
+var reusableArr = [];
+var forContent;
 
 function header(data) {
   var fliplogo = document.getElementById("flipkartlogo");
@@ -87,70 +69,66 @@ function naviteminner(data) {
   document.querySelector(".nav-item-inner").innerHTML = output;
 }
 
-function sortarea(data){
-   let output = "";
-   for(let item of data){
-      output += `
+function sortarea(data) {
+  let output = "";
+  for (let item of data) {
+    output += `
       <div class= "sortitems">
          ${item.sortitemsdef}
       </div>
       `;
-   }
-   document.querySelector(".right-head-third").insertAdjacentHTML('beforeend',output);
+  }
+  document
+    .querySelector(".right-head-third")
+    .insertAdjacentHTML("beforeend", output);
 }
 
-function sortdefaultselected(){
-   const sortitems = document.querySelector('.right-head-third');
-   const currentactive = sortitems.children[1];
-   currentactive.classList.add('selected-sort')
+function sortdefaultselected() {
+  const sortitems = document.querySelector(".right-head-third");
+  const currentactive = sortitems.children[1];
+  currentactive.classList.add("selected-sort");
 }
 
-
-function sortbyworking(){
+function sortbyworking() {
   let elements = document.getElementsByClassName("sortitems");
-  for(let items of elements){
-    items.addEventListener('click',sortaction);
-  } 
-}
-
-function sortaction(event){
-  const prev = document.querySelector('.selected-sort');
-  prev.classList.remove('selected-sort');
-  event.target.classList.add('selected-sort');
-  sortmainbysortby(event.target.innerText);
-}
-
-function sortmainbysortby(content){
-  if(content === "Relevance"){
-    mainbodybuilding(mainarr);
-  }
-  else if(content === "Popularity"){
-    let measureunit = [...mainarr];
-    measureunit.sort((a,b)=>b.rating.count - a.rating.count);
-    mainbodybuilding(measureunit);
-  }
-  else if(content === "Price -- Low to High"){
-    let measureunit = [...mainarr];
-    measureunit.sort((a,b)=>a.price - b.price);
-    mainbodybuilding(measureunit);
-  }
-  else if(content === "Price -- High to Low"){
-    let measureunit = [...mainarr];
-    measureunit.sort((a,b)=>b.price - a.price);
-    mainbodybuilding(measureunit);
-  }
-  else if(content === "Newest First"){
-    let measureunit = [...mainarr];
-    measureunit.sort((a,b)=>a.rating.count - b.rating.count);
-    mainbodybuilding(measureunit);
+  for (let items of elements) {
+    items.addEventListener("click", sortaction);
   }
 }
 
+function sortaction(event) {
+  const prev = document.querySelector(".selected-sort");
+  prev.classList.remove("selected-sort");
+  event.target.classList.add("selected-sort");
+  forContent = event.target.innerText;
+  sortmainbysortby(event.target.innerText,mainarr);
+}
 
-function mainbodybuilding(apidata){
-   let output = "";
-   for(let item of apidata){
-      output +=`
+function sortmainbysortby(content,Arr) {
+  if (content === "Relevance") {
+    mainbodybuilding(Arr);
+  } else if (content === "Popularity") {
+    Arr.sort((a, b) => b.rating.count - a.rating.count);
+    mainbodybuilding(Arr);
+  } else if (content === "Price -- Low to High") {
+    Arr.sort((a, b) => a.price - b.price);
+    mainbodybuilding(Arr);
+  } else if (content === "Price -- High to Low") {
+    Arr.sort((a, b) => b.price - a.price);
+    mainbodybuilding(Arr);
+  } else if (content === "Newest First"){
+    Arr.sort(
+      (a, b) => new Date(a.launch_date) - new Date(b.launch_date)
+    );
+    mainbodybuilding(Arr);
+  }
+}
+
+function mainbodybuilding(data) {
+  document.getElementById("noofmainelem").innerHTML = `${data.length}`;
+  let output = "";
+  for (let item of data) {
+    output += `
      <div class="right-main-elem">
               <div class="right-main-elemin">
                 <div class="right-main-elem-inner">
@@ -162,7 +140,7 @@ function mainbodybuilding(apidata){
                             <div class="elem-left-first-inner">
                               <img
                                 id="mobilepic"
-                                src="${item.images[0]}"
+                                src="${item.images}"
                                 alt=""
                               />
                             </div>
@@ -194,15 +172,21 @@ function mainbodybuilding(apidata){
                           <div class="rating-field">
                             <span id="starrating">
                               <div class="star-rating-inner">
-                                <span id="starratingno">${item.rating.average}</span>
+                                <span id="starratingno">${
+                                  item.rating.average
+                                }</span>
                                 <img src="img/right-main/star.svg" alt="">
                               </div>
                             </span>
                             <span id="ratingnreview">
                               <span>
-                                <span id="noofratings">${item.rating.count} Ratings</span>
+                                <span id="noofratings">${
+                                  item.rating.count
+                                } Ratings</span>
                                 <span id="ratingand">&</span>
-                                <span id="noofreviews">${item.rating.reviewCount} Reviews</span>
+                                <span id="noofreviews">${
+                                  item.rating.reviewCount
+                                } Reviews</span>
                               </span>
                             </span>
                           </div>
@@ -219,10 +203,15 @@ function mainbodybuilding(apidata){
                                 <span id="priceamount">₹${item.price}</span>
                               </div>
                               <div class="mrparea">
-                                <span>₹<span id="mrpamount">${item.mrp}</span></span>
+                                <span>₹<span id="mrpamount">${
+                                  item.mrp
+                                }</span></span>
                               </div>
                               <div class="aboutoffer">
-                                <span id="offerdef">${offercalc(item.price,item.mrp)}% off</span>
+                                <span id="offerdef">${offercalc(
+                                  item.price,
+                                  item.mrp
+                                )}% off</span>
                               </div>
                             </div>
                             <div class="aboutdelivery">
@@ -249,39 +238,123 @@ function mainbodybuilding(apidata){
               </div>
             </div> 
       `;
-   }
+  }
 
-   function specbulider(spec){
-      let output = "";
-      for(let item of spec){
-        output += `
+  function specbulider(spec) {
+    let output = "";
+    for (let item of spec) {
+      output += `
         <li id="specitems">
           <span id="specitemsdef">${item}</span>
         </li>
-        `
-      }
+        `;
+    }
     return output;
-   }
+  }
 
+  function offercalc(small, big) {
+    let ans = ((big - small) / big) * 100;
+    return Math.round(ans);
+  }
 
-   function offercalc(small,big){
-     let ans = ((big - small)/big) * 100;
-     return Math.round(ans);
-   }
-
-
-   document.querySelector(".forjs").innerHTML = output;
+  document.querySelector(".forjs").innerHTML = output;
 }
 
-function minmaxadjust(){
-  var min = document.getElementsByClassName('minsec-inner');
-  min[0].addEventListener('click',minmaxaction);
-  var firstmin = min[0].value;
-  var max = document.getElementsByClassName('maxsec-inner');
-  max[0].addEventListener('click',minmaxaction);
-  var firstmax = max[0].value;
-  console.log(firstmin);
-  console.log(firstmax);
+document.addEventListener("DOMContentLoaded", function () {
+  const minValueSelect = document.querySelector(".minsec-inner");
+  const maxValueSelect = document.querySelector(".maxsec-inner");
+  const minOptions = [
+    { value: "0", text: "Min" },
+    { value: "10000", text: "₹10000" },
+    { value: "15000", text: "₹15000" },
+    { value: "20000", text: "₹20000" },
+    { value: "30000", text: "₹30000" },
+  ];
+
+  const maxOptions = [
+    { value: "Max", text: "₹30000+" },
+    { value: "30000", text: "₹30000" },
+    { value: "20000", text: "₹20000" },
+    { value: "15000", text: "₹15000" },
+    { value: "10000", text: "₹10000" },
+  ];
+
+  function updateMaxOptions() {
+    const minValue = parseInt(minValueSelect.value);
+    const selectedMaxValue = maxValueSelect.value;
+    maxValueSelect.innerHTML = "";
+    maxOptions.forEach((option) => {
+      if (option.value === "Max" || parseInt(option.value) > minValue) {
+        const opt = document.createElement("option");
+        opt.value = option.value;
+        opt.textContent = option.text;
+        maxValueSelect.appendChild(opt);
+        minmaxAdjustMain(minValue,maxValueSelect.value);
+        maxValueSelect.value = selectedMaxValue;
+      }
+    });
+  }
+
+  function updateMinOptions() {
+    const maxValue =maxValueSelect.value === "Max"? Infinity: parseInt(maxValueSelect.value);
+    const selectedMinValue = minValueSelect.value;
+    minValueSelect.innerHTML = "";
+    minOptions.forEach((option) => {
+      if (parseInt(option.value) < maxValue) {
+        const opt = document.createElement("option");
+        opt.value = option.value;
+        opt.textContent = option.text;
+        minValueSelect.appendChild(opt);
+        minmaxAdjustMain(minValueSelect.value, maxValue);
+        minValueSelect.value = selectedMinValue;
+      }
+    });
+  }
+
+  minValueSelect.addEventListener("change", updateMaxOptions);
+  maxValueSelect.addEventListener("change", updateMinOptions);
+
+  updateMaxOptions();
+  updateMinOptions();
+});
+
+function minmaxAdjustMain(min, max) {
+  
+  if(min === 0 && (max == Infinity || max == "Max")){
+    sortmainbysortby(forContent,mainarr);
+    console.log("from me")
+  }
+
+  else{
+    reusableArr = mainarr.filter(element=>{
+      if(element.price >= min && element.price <= max){
+        return element
+      }
+    })
+    console.log("oi")
+    console.log(reusableArr);
+  }
+
 }
+
+
+//   else{
+
+//   }
+
+//   +
+// //   let filteredArr = mainarr.filter((element) => {
+// //     if (element.price >= min) {
+// //       return element;
+// //     }
+// //   });
+// //   let filteredArr2 = filteredArr.filter((element) => {
+// //     if (element.price <= max) {
+// //       return element;
+// //     }
+// //   });
+// //   console.log(min);
+// //   console.log(max);
+// //   mainbodybuilding(filteredArr2);
 
 

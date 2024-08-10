@@ -24,8 +24,11 @@ function copyData(data) {
   });
 }
 
-var reusableArr = [];
-var forContent;
+var reusableArr = mainarr;
+var forContent = 'Relevance';
+
+
+
 
 function header(data) {
   var fliplogo = document.getElementById("flipkartlogo");
@@ -101,22 +104,31 @@ function sortaction(event) {
   prev.classList.remove("selected-sort");
   event.target.classList.add("selected-sort");
   forContent = event.target.innerText;
-  sortmainbysortby(event.target.innerText,mainarr);
+  sortmainbysortby(event.target.innerText,reusableArr);
 }
 
 function sortmainbysortby(content,Arr) {
+  if(Arr == undefined){
+    Arr = [...reusableArr];
+  }
+
   if (content === "Relevance") {
+    Arr.sort((a,b)=> a.itemno - b.itemno);
     mainbodybuilding(Arr);
-  } else if (content === "Popularity") {
+  }
+  else if (content === "Popularity") {
     Arr.sort((a, b) => b.rating.count - a.rating.count);
     mainbodybuilding(Arr);
-  } else if (content === "Price -- Low to High") {
+  } 
+  else if (content === "Price -- Low to High") {
     Arr.sort((a, b) => a.price - b.price);
     mainbodybuilding(Arr);
-  } else if (content === "Price -- High to Low") {
+  } 
+  else if (content === "Price -- High to Low") {
     Arr.sort((a, b) => b.price - a.price);
     mainbodybuilding(Arr);
-  } else if (content === "Newest First"){
+  } 
+  else if (content === "Newest First"){
     Arr.sort(
       (a, b) => new Date(a.launch_date) - new Date(b.launch_date)
     );
@@ -260,101 +272,206 @@ function mainbodybuilding(data) {
   document.querySelector(".forjs").innerHTML = output;
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  const minValueSelect = document.querySelector(".minsec-inner");
-  const maxValueSelect = document.querySelector(".maxsec-inner");
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
   const minOptions = [
-    { value: "0", text: "Min" },
-    { value: "10000", text: "₹10000" },
-    { value: "15000", text: "₹15000" },
-    { value: "20000", text: "₹20000" },
-    { value: "30000", text: "₹30000" },
+      { value: "0", text: "Min" },
+      { value: "10000", text: "₹10000" },
+      { value: "15000", text: "₹15000" },
+      { value: "20000", text: "₹20000" },
+      { value: "30000", text: "₹30000" },
   ];
 
   const maxOptions = [
-    { value: "Max", text: "₹30000+" },
-    { value: "30000", text: "₹30000" },
-    { value: "20000", text: "₹20000" },
-    { value: "15000", text: "₹15000" },
-    { value: "10000", text: "₹10000" },
+      { value: "10000", text: "₹10000" },
+      { value: "15000", text: "₹15000" },
+      { value: "20000", text: "₹20000" },
+      { value: "30000", text: "₹30000" },
+      { value: "Max", text: "₹30000+" },
   ];
 
-  function updateMaxOptions() {
-    const minValue = parseInt(minValueSelect.value);
-    const selectedMaxValue = maxValueSelect.value;
-    maxValueSelect.innerHTML = "";
-    maxOptions.forEach((option) => {
-      if (option.value === "Max" || parseInt(option.value) > minValue) {
-        const opt = document.createElement("option");
-        opt.value = option.value;
-        opt.textContent = option.text;
-        maxValueSelect.appendChild(opt);
-        minmaxAdjustMain(minValue,maxValueSelect.value);
-        maxValueSelect.value = selectedMaxValue;
+  function populateDropdown(selectElement, options, selectedValue) {
+    const minSelect = document.querySelector('.minsec-inner');
+    const maxSelect = document.querySelector('.maxsec-inner');
+    
+      selectElement.innerHTML = '';
+
+      options.forEach(option => {
+          const opt = document.createElement('option');
+          opt.value = option.value;
+          opt.textContent = option.text;
+          selectElement.appendChild(opt);
+      });
+
+      // Retain the previously selected value if it is still valid
+      if (selectedValue && [...selectElement.options].some(opt => opt.value === selectedValue)) {
+          selectElement.value = selectedValue;
+      } else {
+          selectElement.selectedIndex = 0; // Default to first option if previous value is not valid
       }
-    });
   }
 
-  function updateMinOptions() {
-    const maxValue =maxValueSelect.value === "Max"? Infinity: parseInt(maxValueSelect.value);
-    const selectedMinValue = minValueSelect.value;
-    minValueSelect.innerHTML = "";
-    minOptions.forEach((option) => {
-      if (parseInt(option.value) < maxValue) {
-        const opt = document.createElement("option");
-        opt.value = option.value;
-        opt.textContent = option.text;
-        minValueSelect.appendChild(opt);
-        minmaxAdjustMain(minValueSelect.value, maxValue);
-        minValueSelect.value = selectedMinValue;
-      }
-    });
+  function filterOptions() {
+
+      
+    const minSelectedValue = minSelect.value;
+    const minSelectedInner = minSelect.options[minSelect.selectedIndex].text;
+    const maxSelectedValue = maxSelect.value;
+    const maxSelectedInner = maxSelect.options[maxSelect.selectedIndex].text;
+      // Filter maxOptions based on minSelectedValue
+      const filteredMaxOptions = maxOptions.filter(option => {
+          if (option.value === "Max") return true;
+          return parseInt(option.value, 10) > parseInt(minSelectedValue, 10);
+      });
+
+      // Filter minOptions based on maxSelectedValue
+      const filteredMinOptions = minOptions.filter(option => {
+          if (option.value === "0") return true;
+          return parseInt(option.value, 10) < (maxSelectedValue === "Max" ? Infinity : parseInt(maxSelectedValue, 10));
+      });
+
+      populateDropdown(minSelect, filteredMinOptions, minSelectedValue);
+      populateDropdown(maxSelect, filteredMaxOptions, maxSelectedValue);
+      minmaxAdjustMain(minSelectedValue, maxSelectedValue);
+
+      filterAreaBuilding(minSelectedInner, maxSelectedInner);
   }
 
-  minValueSelect.addEventListener("change", updateMaxOptions);
-  maxValueSelect.addEventListener("change", updateMinOptions);
+  // Initial population of dropdowns
+  populateDropdown(document.querySelector('.minsec-inner'), minOptions, "0");
+  populateDropdown(document.querySelector('.maxsec-inner'), maxOptions, "Max");
 
-  updateMaxOptions();
-  updateMinOptions();
+  // Add event listeners
+  document.querySelector('.minsec-inner').addEventListener('change', filterOptions);
+  document.querySelector('.maxsec-inner').addEventListener('change', filterOptions);
 });
 
-function minmaxAdjustMain(min, max) {
-  
-  if(min === 0 && (max == Infinity || max == "Max")){
-    sortmainbysortby(forContent,mainarr);
-    console.log("from me")
-  }
 
+// document.addEventListener("DOMContentLoaded", function () {
+//   const minValueSelect = document.querySelector(".minsec-inner");
+//   const maxValueSelect = document.querySelector(".maxsec-inner");
+//   const minOptions = [
+//     { value: "0", text: "Min" },
+//     { value: "10000", text: "₹10000" },
+//     { value: "15000", text: "₹15000" },
+//     { value: "20000", text: "₹20000" },
+//     { value: "30000", text: "₹30000" },
+//   ];
+
+//   const maxOptions = [
+//     { value: "10000", text: "₹10000" },
+//     { value: "15000", text: "₹15000" },
+//     { value: "20000", text: "₹20000" },
+//     { value: "30000", text: "₹30000" },
+//     { value: "Max", text: "₹30000+" },
+//   ];
+
+//   function updateMaxOptions() {
+//     const minValue = parseInt(minValueSelect.value);
+//     const selectedMaxValue = maxValueSelect.value;
+//     maxValueSelect.innerHTML = "";
+//     maxOptions.forEach((option) => {
+//       if (option.value === "Max" || parseInt(option.value) > minValue) {
+//         const opt = document.createElement("option");
+//         opt.value = option.value;
+//         opt.textContent = option.text;
+//         maxValueSelect.appendChild(opt);
+//         minmaxAdjustMain(minValue,maxValueSelect.value);
+//         maxValueSelect.value = selectedMaxValue;
+//       }
+//     });
+//   }
+
+//   function updateMinOptions() {
+//     const maxValue =maxValueSelect.value === "Max"? Infinity: parseInt(maxValueSelect.value);
+//     const selectedMinValue = minValueSelect.value;
+//     minValueSelect.innerHTML = "";
+//     minOptions.forEach((option) => {
+//       if (parseInt(option.value) < maxValue) {
+//         const opt = document.createElement("option");
+//         opt.value = option.value;
+//         opt.textContent = option.text;
+//         minValueSelect.appendChild(opt);
+//         minmaxAdjustMain(minValueSelect.value, maxValue);
+//         minValueSelect.value = selectedMinValue;
+//       }
+//     });
+//   }
+
+//   minValueSelect.addEventListener("change", updateMaxOptions);
+//   maxValueSelect.addEventListener("change", updateMinOptions);
+
+//   updateMaxOptions();
+//   updateMinOptions();
+// });
+
+function minmaxAdjustMain(min, max) {
+   if (min === '0' && max === 'Max') {
+    reusableArr - [...mainarr];
+     sortmainbysortby(forContent, reusableArr);
+     console.log("from 1");
+    }
+   else if(max === 'Max'){
+     reusableArr = mainarr.filter(element => element.price >= min);
+     sortmainbysortby(forContent, reusableArr);
+     console.log("from2");
+     console.log(forContent)
+     console.log(reusableArr);
+   }
+   else if(min === '0'){
+     reusableArr = mainarr.filter(element=> element.price <= max);
+     sortmainbysortby(forContent, reusableArr);
+     console.log("from3");
+     console.log(reusableArr);
+   }
   else{
-    reusableArr = mainarr.filter(element=>{
-      if(element.price >= min && element.price <= max){
-        return element
-      }
-    })
-    console.log("oi")
-    console.log(reusableArr);
-  }
+     const maxValueSelect = document.querySelector(".maxsec-inner");
+     const max = maxValueSelect.value;
+     reusableArr = mainarr.filter(element => (element.price >= min && element.price <= max));
+     sortmainbysortby(forContent, reusableArr);
+     console.log("from 4");
+     console.log(reusableArr);
+   }
 
 }
 
 
-//   else{
+function filterAreaBuilding(min, max){
+  let output =
+`
+      <div class="area-elm" id="areaelamid">
+        <div class="forxbutton">
+          <span>✕</span>
+        </div>
+      <div class="forelmentarea">
+        <span >${min}-${max}</span>
+      </div>
+    </div>
+    `;
 
-//   }
+  document.querySelector(".pricefilterare-in").innerHTML = output;
+  const selcetedElem = document.querySelector("#areaelamid");
+  selcetedElem.addEventListener('click', function(){
+  output ="";
+  document.querySelector(".pricefilterare-in").innerHTML = output;
+  
+  // populateDropdown();
+});
+}
 
-//   +
-// //   let filteredArr = mainarr.filter((element) => {
-// //     if (element.price >= min) {
-// //       return element;
-// //     }
-// //   });
-// //   let filteredArr2 = filteredArr.filter((element) => {
-// //     if (element.price <= max) {
-// //       return element;
-// //     }
-// //   });
-// //   console.log(min);
-// //   console.log(max);
-// //   mainbodybuilding(filteredArr2);
+// populateDropdown(document.querySelector('.minsec-inner'), minOptions, "0");
+//   populateDropdown(document.querySelector('.maxsec-inner'), maxOptions, "Max");
 
-
+// document.addEventListener('DOMContentLoaded', () =>{
+//   const myElem = document.getElementById('areaelamid');
+//   myElem.addEventListener('click', function(){
+//     console.log("hai");
+//   });
+// });
+// function mainbodybuilding(data) {
+//   document.getElementById("noofmainelem").innerHTML = `${data.length}`;
+//   let output = "";
+//   for (let item of data) {
+//     output += `

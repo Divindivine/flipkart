@@ -274,9 +274,7 @@ function mainbodybuilding(data) {
 
 
 
-
-document.addEventListener('DOMContentLoaded', () => {
-  const minOptions = [
+minOptions = [
       { value: "0", text: "Min" },
       { value: "10000", text: "₹10000" },
       { value: "15000", text: "₹15000" },
@@ -284,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { value: "30000", text: "₹30000" },
   ];
 
-  const maxOptions = [
+  maxOptions = [
       { value: "10000", text: "₹10000" },
       { value: "15000", text: "₹15000" },
       { value: "20000", text: "₹20000" },
@@ -293,8 +291,6 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   function populateDropdown(selectElement, options, selectedValue) {
-    const minSelect = document.querySelector('.minsec-inner');
-    const maxSelect = document.querySelector('.maxsec-inner');
     
       selectElement.innerHTML = '';
 
@@ -305,17 +301,19 @@ document.addEventListener('DOMContentLoaded', () => {
           selectElement.appendChild(opt);
       });
 
-      // Retain the previously selected value if it is still valid
+      
       if (selectedValue && [...selectElement.options].some(opt => opt.value === selectedValue)) {
           selectElement.value = selectedValue;
       } else {
-          selectElement.selectedIndex = 0; // Default to first option if previous value is not valid
+          selectElement.selectedIndex = 0;
       }
   }
 
   function filterOptions() {
 
       
+    const minSelect = document.querySelector('.minsec-inner');
+    const maxSelect = document.querySelector('.maxsec-inner');
     const minSelectedValue = minSelect.value;
     const minSelectedInner = minSelect.options[minSelect.selectedIndex].text;
     const maxSelectedValue = maxSelect.value;
@@ -339,100 +337,34 @@ document.addEventListener('DOMContentLoaded', () => {
       filterAreaBuilding(minSelectedInner, maxSelectedInner);
   }
 
-  // Initial population of dropdowns
+
   populateDropdown(document.querySelector('.minsec-inner'), minOptions, "0");
   populateDropdown(document.querySelector('.maxsec-inner'), maxOptions, "Max");
 
-  // Add event listeners
+  
   document.querySelector('.minsec-inner').addEventListener('change', filterOptions);
   document.querySelector('.maxsec-inner').addEventListener('change', filterOptions);
-});
 
 
-// document.addEventListener("DOMContentLoaded", function () {
-//   const minValueSelect = document.querySelector(".minsec-inner");
-//   const maxValueSelect = document.querySelector(".maxsec-inner");
-//   const minOptions = [
-//     { value: "0", text: "Min" },
-//     { value: "10000", text: "₹10000" },
-//     { value: "15000", text: "₹15000" },
-//     { value: "20000", text: "₹20000" },
-//     { value: "30000", text: "₹30000" },
-//   ];
-
-//   const maxOptions = [
-//     { value: "10000", text: "₹10000" },
-//     { value: "15000", text: "₹15000" },
-//     { value: "20000", text: "₹20000" },
-//     { value: "30000", text: "₹30000" },
-//     { value: "Max", text: "₹30000+" },
-//   ];
-
-//   function updateMaxOptions() {
-//     const minValue = parseInt(minValueSelect.value);
-//     const selectedMaxValue = maxValueSelect.value;
-//     maxValueSelect.innerHTML = "";
-//     maxOptions.forEach((option) => {
-//       if (option.value === "Max" || parseInt(option.value) > minValue) {
-//         const opt = document.createElement("option");
-//         opt.value = option.value;
-//         opt.textContent = option.text;
-//         maxValueSelect.appendChild(opt);
-//         minmaxAdjustMain(minValue,maxValueSelect.value);
-//         maxValueSelect.value = selectedMaxValue;
-//       }
-//     });
-//   }
-
-//   function updateMinOptions() {
-//     const maxValue =maxValueSelect.value === "Max"? Infinity: parseInt(maxValueSelect.value);
-//     const selectedMinValue = minValueSelect.value;
-//     minValueSelect.innerHTML = "";
-//     minOptions.forEach((option) => {
-//       if (parseInt(option.value) < maxValue) {
-//         const opt = document.createElement("option");
-//         opt.value = option.value;
-//         opt.textContent = option.text;
-//         minValueSelect.appendChild(opt);
-//         minmaxAdjustMain(minValueSelect.value, maxValue);
-//         minValueSelect.value = selectedMinValue;
-//       }
-//     });
-//   }
-
-//   minValueSelect.addEventListener("change", updateMaxOptions);
-//   maxValueSelect.addEventListener("change", updateMinOptions);
-
-//   updateMaxOptions();
-//   updateMinOptions();
-// });
 
 function minmaxAdjustMain(min, max) {
    if (min === '0' && max === 'Max') {
     reusableArr - [...mainarr];
      sortmainbysortby(forContent, reusableArr);
-     console.log("from 1");
     }
    else if(max === 'Max'){
      reusableArr = mainarr.filter(element => element.price >= min);
      sortmainbysortby(forContent, reusableArr);
-     console.log("from2");
-     console.log(forContent)
-     console.log(reusableArr);
    }
    else if(min === '0'){
      reusableArr = mainarr.filter(element=> element.price <= max);
      sortmainbysortby(forContent, reusableArr);
-     console.log("from3");
-     console.log(reusableArr);
    }
   else{
      const maxValueSelect = document.querySelector(".maxsec-inner");
      const max = maxValueSelect.value;
      reusableArr = mainarr.filter(element => (element.price >= min && element.price <= max));
      sortmainbysortby(forContent, reusableArr);
-     console.log("from 4");
-     console.log(reusableArr);
    }
 
 }
@@ -454,24 +386,111 @@ function filterAreaBuilding(min, max){
   document.querySelector(".pricefilterare-in").innerHTML = output;
   const selcetedElem = document.querySelector("#areaelamid");
   selcetedElem.addEventListener('click', function(){
-  output ="";
-  document.querySelector(".pricefilterare-in").innerHTML = output;
-  
-  // populateDropdown();
+    output ="";
+    document.querySelector(".pricefilterare-in").innerHTML = output;
+    populateDropdown(document.querySelector('.minsec-inner'), minOptions, "0");
+    populateDropdown(document.querySelector('.maxsec-inner'), maxOptions, "Max");
+    reusableArr = [...mainarr];
+    console.log("hai");
+    sortmainbysortby(forContent, reusableArr);
+  });
+}
+var incr = 90;
+var num = 0
+const brandClick = document.querySelector(".brand-header");
+brandClick.addEventListener('click', function(){
+  var arrow = document.getElementById('brand_arrow');
+  incr += 180;
+  num += 1;
+  arrow.style.transform = `rotate(${incr}deg)`;
+  showBrands(num, mainarr)
 });
+
+
+// function showBrands(num, arr){
+//  const brandName = arr.map(element=> element.brand);
+//  let output = "";
+//  num += 1;
+//  for(let item of arr){
+//   output += `
+  
+//    <div class="brand-elems">
+//       <div class="brand-elems-in">
+//         <div class="brand-elems-inner">
+//           <div class="forbox">
+//             <div class="boxlabel">
+//               <input type="checkbox" class="forbrandselection">
+//             </div>
+//           </div>
+//         <span id="brandnamedef">${item.brand}</span>
+//       </div>
+//     </div>
+//   </div>
+//   `
+//  }
+//  console.log(output);
+//  document.querySelector("#brandjs").innerHTML += output;
+ 
+//  if(num % 2 == 1){
+//   output = "";
+//   document.querySelector(".brand-body-main").innerHTML = output;
+//  }
+// }
+
+function showBrands(num, arr1) {
+  const brandName = arr1.map(element => element.brand);
+  let output = `
+   <div class="brand-search">
+      <img id="searchforbrand" src="img/left-main/brand-search.svg" alt="">
+      <input class="brandinput" type="text" placeholder="Search Brand">
+   </div>`;
+  num += 1;
+  let arr = [...new Set(brandName)];
+  for (let item of arr) {
+      output += `
+      <div class="brand-elems">
+          <div class="brand-elems-in">
+              <div class="brand-elems-inner">
+                  <div class="forbox">
+                      <div class="boxlabel">
+                          <input type="checkbox" class="forbrandselection">
+                      </div>
+                  </div>
+                  <span id="brandnamedef">${item}</span>
+              </div>
+          </div>
+      </div>
+      `;
+  }
+
+  document.querySelector(".brand-body-main").innerHTML += output;
+  let totalBrands = document.getElementsByClassName("forbrandselection");
+  let i = 0;
+  for(let item of totalBrands){
+    i += 1;
+    item.classList.add(`brandno_${i}`);
+  }
+
+
+  if (num % 2 === 1) {
+       document.querySelector(".brand-body-main").innerHTML = "";
+  }
 }
 
-// populateDropdown(document.querySelector('.minsec-inner'), minOptions, "0");
-//   populateDropdown(document.querySelector('.maxsec-inner'), maxOptions, "Max");
+let mobile1 = "MOTOROLA";
+let mobile2 = "REDMI";
+let mobile3 = "POCO";
+let mobile4 = "Apple";
+let mobile5 = "Nokia";
+let mobile6 = "realme";
+let mobile7 = "SAMSUNG";
 
-// document.addEventListener('DOMContentLoaded', () =>{
-//   const myElem = document.getElementById('areaelamid');
-//   myElem.addEventListener('click', function(){
-//     console.log("hai");
-//   });
-// });
-// function mainbodybuilding(data) {
-//   document.getElementById("noofmainelem").innerHTML = `${data.length}`;
-//   let output = "";
-//   for (let item of data) {
-//     output += `
+// <input type="checkbox" id="myCheckbox"> Click me!
+// <div id="result"></div>
+
+// const checkbox = document.getElementById('myCheckbox');
+// const resultDiv = document.getElementById('result');
+
+
+
+

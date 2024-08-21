@@ -1,33 +1,61 @@
-function fetchingdata() {
+let mainArr = [];
+
+
+function fetchdata() {
   fetch("flipkart.json")
     .then((response) => response.json())
     .then((data) => {
+      copydata(data.products);
       header(data.headeritems);
       naviteminner(data.navitems);
       sortarea(data.sortitems);
-      mainbodybuilding(data.products);
-      copyData(data.products);
-      sortdefaultselected();
       sortbyworking();
+      sortdefaultselected();
+      mainbodybuilding(data.products);
     })
     .catch((err) => {
       console.log("error:", err);
     });
 }
 
-fetchingdata();
+fetchdata();
 
-var mainarr = [];
-function copyData(data) {
-  data.forEach((element) => {
-    mainarr.push(element);
+// function fetchingdata() {
+//   fetch("flipkart.json")
+//     .then((response) => response.json())
+//     .then((data) => {
+//       header(data.headeritems);
+//       naviteminner(data.navitems);
+//       sortarea(data.sortitems);
+//       mainbodybuilding(data.products);
+//       copyData(data.products);
+//       sortdefaultselected();
+//       sortbyworking();
+//     })
+//     .catch((err) => {
+//       console.log("error:", err);
+//     });
+// }
+
+// fetchingdata();
+
+// var mainarr = [];
+// function copyData(data) {
+//   data.forEach((element) => {
+//     mainarr.push(element);
+//   });
+// }
+
+// var reusableArr = mainarr;
+// var forContent = 'Relevance';
+
+function copydata(products){
+  console.log(products);
+  products.forEach(element => {
+    mainArr.push(element);
   });
+  console.log(products[0]);
 }
-
-var reusableArr = mainarr;
-var forContent = 'Relevance';
-
-
 
 
 function header(data) {
@@ -104,37 +132,32 @@ function sortaction(event) {
   prev.classList.remove("selected-sort");
   event.target.classList.add("selected-sort");
   forContent = event.target.innerText;
-  sortmainbysortby(event.target.innerText,reusableArr);
+  sortmainbysortby(event.target.innerText, reusableArr);
 }
 
-function sortmainbysortby(content,Arr) {
-  if(Arr == undefined){
+function sortmainbysortby(content, Arr) {
+  if (Arr == undefined) {
     Arr = [...reusableArr];
   }
 
   if (content === "Relevance") {
-    Arr.sort((a,b)=> a.itemno - b.itemno);
+    Arr.sort((a, b) => a.itemno - b.itemno);
     mainbodybuilding(Arr);
-  }
-  else if (content === "Popularity") {
+  } else if (content === "Popularity") {
     Arr.sort((a, b) => b.rating.count - a.rating.count);
     mainbodybuilding(Arr);
-  } 
-  else if (content === "Price -- Low to High") {
+  } else if (content === "Price -- Low to High") {
     Arr.sort((a, b) => a.price - b.price);
     mainbodybuilding(Arr);
-  } 
-  else if (content === "Price -- High to Low") {
+  } else if (content === "Price -- High to Low") {
     Arr.sort((a, b) => b.price - a.price);
     mainbodybuilding(Arr);
-  } 
-  else if (content === "Newest First"){
-    Arr.sort(
-      (a, b) => new Date(a.launch_date) - new Date(b.launch_date)
-    );
+  } else if (content === "Newest First") {
+    Arr.sort((a, b) => new Date(a.launch_date) - new Date(b.launch_date));
     mainbodybuilding(Arr);
   }
 }
+
 
 function mainbodybuilding(data) {
   document.getElementById("noofmainelem").innerHTML = `${data.length}`;
@@ -152,7 +175,7 @@ function mainbodybuilding(data) {
                             <div class="elem-left-first-inner">
                               <img
                                 id="mobilepic"
-                                src="${item.images}"
+                                src="${item.images[0]}"
                                 alt=""
                               />
                             </div>
@@ -184,28 +207,20 @@ function mainbodybuilding(data) {
                           <div class="rating-field">
                             <span id="starrating">
                               <div class="star-rating-inner">
-                                <span id="starratingno">${
-                                  item.rating.average
-                                }</span>
+                                <span id="starratingno">${item.rating.average}</span>
                                 <img src="img/right-main/star.svg" alt="">
                               </div>
                             </span>
                             <span id="ratingnreview">
                               <span>
-                                <span id="noofratings">${
-                                  item.rating.count
-                                } Ratings</span>
+                                <span id="noofratings">${item.rating.count} Ratings</span>
                                 <span id="ratingand">&</span>
-                                <span id="noofreviews">${
-                                  item.rating.reviewCount
-                                } Reviews</span>
+                                <span id="noofreviews">${item.rating.reviewCount} Reviews</span>
                               </span>
                             </span>
                           </div>
                           <div class="spec-field">
-                            <ul class="specfieldinner">
-                              ${specbulider(item.highlights)}
-                            </ul>
+                            <ul class="specfieldinner">${specbulider(item.highlights)}</ul>
                           </div>
                         </div>
                         <div class="elem-right-right">
@@ -215,15 +230,10 @@ function mainbodybuilding(data) {
                                 <span id="priceamount">₹${item.price}</span>
                               </div>
                               <div class="mrparea">
-                                <span>₹<span id="mrpamount">${
-                                  item.mrp
-                                }</span></span>
+                                <span>₹<span id="mrpamount">${item.mrp}</span></span>
                               </div>
                               <div class="aboutoffer">
-                                <span id="offerdef">${offercalc(
-                                  item.price,
-                                  item.mrp
-                                )}% off</span>
+                                <span id="offerdef">${offercalc(item.price,item.mrp)}% off</span>
                               </div>
                             </div>
                             <div class="aboutdelivery">
@@ -252,6 +262,7 @@ function mainbodybuilding(data) {
       `;
   }
 
+
   function specbulider(spec) {
     let output = "";
     for (let item of spec) {
@@ -272,8 +283,6 @@ function mainbodybuilding(data) {
   document.querySelector(".forjs").innerHTML = output;
 }
 
-
-
 minOptions = [
       { value: "0", text: "Min" },
       { value: "10000", text: "₹10000" },
@@ -290,98 +299,86 @@ minOptions = [
       { value: "Max", text: "₹30000+" },
   ];
 
-  function populateDropdown(selectElement, options, selectedValue) {
-    
-      selectElement.innerHTML = '';
+function populateDropdown(selectElement, options, selectedValue) {
 
-      options.forEach(option => {
-          const opt = document.createElement('option');
-          opt.value = option.value;
-          opt.textContent = option.text;
-          selectElement.appendChild(opt);
-      });
+  selectElement.innerHTML = '';
 
-      
-      if (selectedValue && [...selectElement.options].some(opt => opt.value === selectedValue)) {
-          selectElement.value = selectedValue;
-      } else {
-          selectElement.selectedIndex = 0;
-      }
+  options.forEach(option => {
+    const opt = document.createElement('option');
+    opt.value = option.value;
+    opt.textContent = option.text;
+    selectElement.appendChild(opt);
+  });
+
+  if (selectedValue && [...selectElement.options].some(opt => opt.value === selectedValue)) {
+      selectElement.value = selectedValue;
+  } else {
+      selectElement.selectedIndex = 0;
   }
-
-  function filterOptions() {
-
-      
-    const minSelect = document.querySelector('.minsec-inner');
-    const maxSelect = document.querySelector('.maxsec-inner');
-    const minSelectedValue = minSelect.value;
-    const minSelectedInner = minSelect.options[minSelect.selectedIndex].text;
-    const maxSelectedValue = maxSelect.value;
-    const maxSelectedInner = maxSelect.options[maxSelect.selectedIndex].text;
-      // Filter maxOptions based on minSelectedValue
-      const filteredMaxOptions = maxOptions.filter(option => {
-          if (option.value === "Max") return true;
-          return parseInt(option.value, 10) > parseInt(minSelectedValue, 10);
-      });
-
-      // Filter minOptions based on maxSelectedValue
-      const filteredMinOptions = minOptions.filter(option => {
-          if (option.value === "0") return true;
-          return parseInt(option.value, 10) < (maxSelectedValue === "Max" ? Infinity : parseInt(maxSelectedValue, 10));
-      });
-
-      populateDropdown(minSelect, filteredMinOptions, minSelectedValue);
-      populateDropdown(maxSelect, filteredMaxOptions, maxSelectedValue);
-      minmaxAdjustMain(minSelectedValue, maxSelectedValue);
-
-      filterAreaBuilding(minSelectedInner, maxSelectedInner);
-  }
-
-
-  populateDropdown(document.querySelector('.minsec-inner'), minOptions, "0");
-  populateDropdown(document.querySelector('.maxsec-inner'), maxOptions, "Max");
-
-  
-  document.querySelector('.minsec-inner').addEventListener('change', filterOptions);
-  document.querySelector('.maxsec-inner').addEventListener('change', filterOptions);
-
-
-
-function minmaxAdjustMain(min, max) {
-   if (min === '0' && max === 'Max') {
-    reusableArr - [...mainarr];
-     sortmainbysortby(forContent, reusableArr);
-    }
-   else if(max === 'Max'){
-     reusableArr = mainarr.filter(element => element.price >= min);
-     sortmainbysortby(forContent, reusableArr);
-   }
-   else if(min === '0'){
-     reusableArr = mainarr.filter(element=> element.price <= max);
-     sortmainbysortby(forContent, reusableArr);
-   }
-  else{
-     const maxValueSelect = document.querySelector(".maxsec-inner");
-     const max = maxValueSelect.value;
-     reusableArr = mainarr.filter(element => (element.price >= min && element.price <= max));
-     sortmainbysortby(forContent, reusableArr);
-   }
-
 }
 
 
+function filterOptions(){
+  const minSelect = document.querySelector('.minsec-inner');
+  const maxSelect = document.querySelector('.maxsec-inner');
+  const minSelectedValue = minSelect.value;
+  const minSelectedInner = minSelect.options[minSelect.selectedIndex].text;
+  const maxSelectedValue = maxSelect.value;
+  const maxSelectedInner = maxSelect.options[maxSelect.selectedIndex].text;
+  const filteredMaxOptions = maxOptions.filter(option => {
+  if (option.value === "Max") return true;
+    return parseInt(option.value, 10) > parseInt(minSelectedValue, 10);
+  });
+  const filteredMinOptions = minOptions.filter(option => {
+  if (option.value === "0") return true;
+    return parseInt(option.value, 10) < (maxSelectedValue === "Max" ? Infinity : parseInt(maxSelectedValue, 10));
+  });
+  populateDropdown(minSelect, filteredMinOptions, minSelectedValue);
+  populateDropdown(maxSelect, filteredMaxOptions, maxSelectedValue);
+  minmaxAdjustMain(minSelectedValue, maxSelectedValue);
+  filterAreaBuilding(minSelectedInner, maxSelectedInner);
+}
+
+
+populateDropdown(document.querySelector('.minsec-inner'), minOptions, "0");
+populateDropdown(document.querySelector('.maxsec-inner'), maxOptions, "Max");
+
+document.querySelector('.minsec-inner').addEventListener('change', filterOptions);
+document.querySelector('.maxsec-inner').addEventListener('change', filterOptions);
+
+function minmaxAdjustMain(min, max){
+  if (min === '0' && max === 'Max') {
+    reusableArr - [...mainarr];
+    sortmainbysortby(forContent, reusableArr);
+  }
+  else if(max === 'Max'){
+    reusableArr = mainarr.filter(element => element.price >= min);
+    sortmainbysortby(forContent, reusableArr);
+  }
+  else if(min === '0'){
+    reusableArr = mainarr.filter(element=> element.price <= max);
+    sortmainbysortby(forContent, reusableArr);
+  }
+  else{
+    const maxValueSelect = document.querySelector(".maxsec-inner");
+    const max = maxValueSelect.value;
+    reusableArr = mainarr.filter(element => (element.price >= min && element.price <= max));
+    sortmainbysortby(forContent, reusableArr);
+  }
+}
+
 function filterAreaBuilding(min, max){
-  let output =
-`
-      <div class="area-elm" id="areaelamid">
-        <div class="forxbutton">
+  let output ="";
+  `
+       <div class="area-elm" id="areaelamid">
+         <div class="forxbutton">
           <span>✕</span>
-        </div>
-      <div class="forelmentarea">
-        <span >${min}-${max}</span>
-      </div>
-    </div>
-    `;
+         </div>
+       <div class="forelmentarea">
+         <span >${min}-${max}</span>
+       </div>
+     </div>
+    ;`
 
   document.querySelector(".pricefilterare-in").innerHTML = output;
   const selcetedElem = document.querySelector("#areaelamid");
@@ -395,102 +392,127 @@ function filterAreaBuilding(min, max){
     sortmainbysortby(forContent, reusableArr);
   });
 }
-var incr = 90;
-var num = 0
-const brandClick = document.querySelector(".brand-header");
-brandClick.addEventListener('click', function(){
-  var arrow = document.getElementById('brand_arrow');
-  incr += 180;
-  num += 1;
-  arrow.style.transform = `rotate(${incr}deg)`;
-  showBrands(num, mainarr)
-});
 
 
-// function showBrands(num, arr){
-//  const brandName = arr.map(element=> element.brand);
-//  let output = "";
-//  num += 1;
-//  for(let item of arr){
-//   output += `
-  
-//    <div class="brand-elems">
-//       <div class="brand-elems-in">
-//         <div class="brand-elems-inner">
-//           <div class="forbox">
-//             <div class="boxlabel">
-//               <input type="checkbox" class="forbrandselection">
-//             </div>
-//           </div>
-//         <span id="brandnamedef">${item.brand}</span>
+
+
+
+
+// function filterAreaBuilding(min, max){
+//   let output =
+// `
+//       <div class="area-elm" id="areaelamid">
+//         <div class="forxbutton">
+//           <span>✕</span>
+//         </div>
+//       <div class="forelmentarea">
+//         <span >${min}-${max}</span>
 //       </div>
 //     </div>
-//   </div>
-//   `
-//  }
-//  console.log(output);
-//  document.querySelector("#brandjs").innerHTML += output;
- 
-//  if(num % 2 == 1){
-//   output = "";
-//   document.querySelector(".brand-body-main").innerHTML = output;
-//  }
+//     `;
+
+//   document.querySelector(".pricefilterare-in").innerHTML = output;
+//   const selcetedElem = document.querySelector("#areaelamid");
+//   selcetedElem.addEventListener('click', function(){
+//     output ="";
+//     document.querySelector(".pricefilterare-in").innerHTML = output;
+//     populateDropdown(document.querySelector('.minsec-inner'), minOptions, "0");
+//     populateDropdown(document.querySelector('.maxsec-inner'), maxOptions, "Max");
+//     reusableArr = [...mainarr];
+//     console.log("hai");
+//     sortmainbysortby(forContent, reusableArr);
+//   });
+// }
+// var incr = 90;
+// var num = 0
+// const brandClick = document.querySelector(".brand-header");
+// brandClick.addEventListener('click', function(){
+//   var arrow = document.getElementById('brand_arrow');
+//   incr += 180;
+//   num += 1;
+//   arrow.style.transform = `rotate(${incr}deg)`;
+//   showBrands(num, mainarr)
+// });
+
+// // function showBrands(num, arr){
+// //  const brandName = arr.map(element=> element.brand);
+// //  let output = "";
+// //  num += 1;
+// //  for(let item of arr){
+// //   output += `
+
+// //    <div class="brand-elems">
+// //       <div class="brand-elems-in">
+// //         <div class="brand-elems-inner">
+// //           <div class="forbox">
+// //             <div class="boxlabel">
+// //               <input type="checkbox" class="forbrandselection">
+// //             </div>
+// //           </div>
+// //         <span id="brandnamedef">${item.brand}</span>
+// //       </div>
+// //     </div>
+// //   </div>
+// //   `
+// //  }
+// //  console.log(output);
+// //  document.querySelector("#brandjs").innerHTML += output;
+
+// //  if(num % 2 == 1){
+// //   output = "";
+// //   document.querySelector(".brand-body-main").innerHTML = output;
+// //  }
+// // }
+
+// function showBrands(num, arr1) {
+//   const brandName = arr1.map(element => element.brand);
+//   let output = `
+//    <div class="brand-search">
+//       <img id="searchforbrand" src="img/left-main/brand-search.svg" alt="">
+//       <input class="brandinput" type="text" placeholder="Search Brand">
+//    </div>`;
+//   num += 1;
+//   let arr = [...new Set(brandName)];
+//   for (let item of arr) {
+//       output += `
+//       <div class="brand-elems">
+//           <div class="brand-elems-in">
+//               <div class="brand-elems-inner">
+//                   <div class="forbox">
+//                       <div class="boxlabel">
+//                           <input type="checkbox" class="forbrandselection">
+//                       </div>
+//                   </div>
+//                   <span id="brandnamedef">${item}</span>
+//               </div>
+//           </div>
+//       </div>
+//       `;
+//   }
+
+//   document.querySelector(".brand-body-main").innerHTML += output;
+//   let totalBrands = document.getElementsByClassName("forbrandselection");
+//   let i = 0;
+//   for(let item of totalBrands){
+//     i += 1;
+//     item.classList.add(`brandno_${i}`);
+//   }
+
+//   if (num % 2 === 1) {
+//        document.querySelector(".brand-body-main").innerHTML = "";
+//   }
 // }
 
-function showBrands(num, arr1) {
-  const brandName = arr1.map(element => element.brand);
-  let output = `
-   <div class="brand-search">
-      <img id="searchforbrand" src="img/left-main/brand-search.svg" alt="">
-      <input class="brandinput" type="text" placeholder="Search Brand">
-   </div>`;
-  num += 1;
-  let arr = [...new Set(brandName)];
-  for (let item of arr) {
-      output += `
-      <div class="brand-elems">
-          <div class="brand-elems-in">
-              <div class="brand-elems-inner">
-                  <div class="forbox">
-                      <div class="boxlabel">
-                          <input type="checkbox" class="forbrandselection">
-                      </div>
-                  </div>
-                  <span id="brandnamedef">${item}</span>
-              </div>
-          </div>
-      </div>
-      `;
-  }
+// let mobile1 = "MOTOROLA";
+// let mobile2 = "REDMI";
+// let mobile3 = "POCO";
+// let mobile4 = "Apple";
+// let mobile5 = "Nokia";
+// let mobile6 = "realme";
+// let mobile7 = "SAMSUNG";
 
-  document.querySelector(".brand-body-main").innerHTML += output;
-  let totalBrands = document.getElementsByClassName("forbrandselection");
-  let i = 0;
-  for(let item of totalBrands){
-    i += 1;
-    item.classList.add(`brandno_${i}`);
-  }
+// // <input type="checkbox" id="myCheckbox"> Click me!
+// // <div id="result"></div>
 
-
-  if (num % 2 === 1) {
-       document.querySelector(".brand-body-main").innerHTML = "";
-  }
-}
-
-let mobile1 = "MOTOROLA";
-let mobile2 = "REDMI";
-let mobile3 = "POCO";
-let mobile4 = "Apple";
-let mobile5 = "Nokia";
-let mobile6 = "realme";
-let mobile7 = "SAMSUNG";
-
-// <input type="checkbox" id="myCheckbox"> Click me!
-// <div id="result"></div>
-
-// const checkbox = document.getElementById('myCheckbox');
-// const resultDiv = document.getElementById('result');
-
-
-
-
+// // const checkbox = document.getElementById('myCheckbox');
+// // const resultDiv = document.getElementById('result');

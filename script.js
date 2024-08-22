@@ -1,4 +1,7 @@
 let mainArr = [];
+let reusableArr = mainArr;
+let forContent = "Relevance";
+let brandArr = [];
 
 
 function fetchdata() {
@@ -20,41 +23,11 @@ function fetchdata() {
 
 fetchdata();
 
-// function fetchingdata() {
-//   fetch("flipkart.json")
-//     .then((response) => response.json())
-//     .then((data) => {
-//       header(data.headeritems);
-//       naviteminner(data.navitems);
-//       sortarea(data.sortitems);
-//       mainbodybuilding(data.products);
-//       copyData(data.products);
-//       sortdefaultselected();
-//       sortbyworking();
-//     })
-//     .catch((err) => {
-//       console.log("error:", err);
-//     });
-// }
-
-// fetchingdata();
-
-// var mainarr = [];
-// function copyData(data) {
-//   data.forEach((element) => {
-//     mainarr.push(element);
-//   });
-// }
-
-// var reusableArr = mainarr;
-// var forContent = 'Relevance';
 
 function copydata(products){
-  console.log(products);
   products.forEach(element => {
     mainArr.push(element);
   });
-  console.log(products[0]);
 }
 
 
@@ -141,7 +114,7 @@ function sortmainbysortby(content, Arr) {
   }
 
   if (content === "Relevance") {
-    Arr.sort((a, b) => a.itemno - b.itemno);
+    Arr.sort((a, b) => a.index - b.index);
     mainbodybuilding(Arr);
   } else if (content === "Popularity") {
     Arr.sort((a, b) => b.rating.count - a.rating.count);
@@ -153,7 +126,7 @@ function sortmainbysortby(content, Arr) {
     Arr.sort((a, b) => b.price - a.price);
     mainbodybuilding(Arr);
   } else if (content === "Newest First") {
-    Arr.sort((a, b) => new Date(a.launch_date) - new Date(b.launch_date));
+    Arr.sort((a, b) => new Date(a.manufacturing_date) - new Date(b.manufacturing_date));
     mainbodybuilding(Arr);
   }
 }
@@ -333,6 +306,7 @@ function filterOptions(){
   if (option.value === "0") return true;
     return parseInt(option.value, 10) < (maxSelectedValue === "Max" ? Infinity : parseInt(maxSelectedValue, 10));
   });
+
   populateDropdown(minSelect, filteredMinOptions, minSelectedValue);
   populateDropdown(maxSelect, filteredMaxOptions, maxSelectedValue);
   minmaxAdjustMain(minSelectedValue, maxSelectedValue);
@@ -348,37 +322,42 @@ document.querySelector('.maxsec-inner').addEventListener('change', filterOptions
 
 function minmaxAdjustMain(min, max){
   if (min === '0' && max === 'Max') {
-    reusableArr - [...mainarr];
+    reusableArr = [...mainArr];
     sortmainbysortby(forContent, reusableArr);
   }
   else if(max === 'Max'){
-    reusableArr = mainarr.filter(element => element.price >= min);
+    reusableArr = mainArr.filter(element => element.price >= min);
     sortmainbysortby(forContent, reusableArr);
   }
   else if(min === '0'){
-    reusableArr = mainarr.filter(element=> element.price <= max);
+    reusableArr = mainArr.filter(element=> element.price <= max);
     sortmainbysortby(forContent, reusableArr);
   }
   else{
     const maxValueSelect = document.querySelector(".maxsec-inner");
     const max = maxValueSelect.value;
-    reusableArr = mainarr.filter(element => (element.price >= min && element.price <= max));
+    reusableArr = mainArr.filter(element => (element.price >= min && element.price <= max));
     sortmainbysortby(forContent, reusableArr);
   }
 }
 
+
+
+
+
+
 function filterAreaBuilding(min, max){
-  let output ="";
-  `
-       <div class="area-elm" id="areaelamid">
-         <div class="forxbutton">
+  let output =
+`
+      <div class="area-elm" id="areaelamid">
+        <div class="forxbutton">
           <span>✕</span>
-         </div>
-       <div class="forelmentarea">
-         <span >${min}-${max}</span>
-       </div>
-     </div>
-    ;`
+        </div>
+      <div class="forelmentarea">
+        <span >${min}-${max}</span>
+      </div>
+    </div>
+    `;
 
   document.querySelector(".pricefilterare-in").innerHTML = output;
   const selcetedElem = document.querySelector("#areaelamid");
@@ -387,19 +366,139 @@ function filterAreaBuilding(min, max){
     document.querySelector(".pricefilterare-in").innerHTML = output;
     populateDropdown(document.querySelector('.minsec-inner'), minOptions, "0");
     populateDropdown(document.querySelector('.maxsec-inner'), maxOptions, "Max");
-    reusableArr = [...mainarr];
-    console.log("hai");
+    reusableArr = [...mainArr];
     sortmainbysortby(forContent, reusableArr);
   });
 }
 
 
+var incr = 90;
+var num = 0
+const brandClick = document.querySelector(".brand-header");
+brandClick.addEventListener('click', function(){
+  var arrow = document.getElementById('brand_arrow');
+  incr += 180;
+  num += 1;
+  arrow.style.transform = `rotate(${incr}deg)`;
+  showBrands(num, mainArr);
+});
 
 
 
 
-// function filterAreaBuilding(min, max){
-//   let output =
+
+function showBrands(num, arr1) {
+  const brandName = arr1.map(element => element.brand);
+  let output = `
+   <div class="brand-search">
+      <img id="searchforbrand" src="img/left-main/brand-search.svg" alt="">
+      <input class="brandinput" type="text" placeholder="Search Brand">
+   </div>`;
+  num += 1;
+  let arr = [...new Set(brandName)];
+  for (let item of arr) {
+      output += `
+      <div class="brand-elems">
+          <div class="brand-elems-in">
+              <div class="brand-elems-inner">
+                  <div class="forbox">
+                      <div class="boxlabel">
+                          <input type="checkbox" class="forbrandselection" onclick="checkboxClicked(this)">
+                      </div>
+                  </div>
+                  <span id="brandnamedef">${item}</span>
+              </div>
+          </div>
+      </div>
+      `;
+  }
+
+  document.querySelector(".brand-body-main").innerHTML += output;
+  let totalBrands = document.getElementsByClassName("forbrandselection");
+  let i = 0;
+  for(let item of totalBrands){
+    i += 1;
+    item.classList.add(`brandno_${i}`);
+  }
+
+  if (num % 2 === 1) {
+       document.querySelector(".brand-body-main").innerHTML = "";
+  }
+}
+
+// let mobile1 = "MOTOROLA";
+// let mobile2 = "REDMI";
+// let mobile3 = "POCO";
+// let mobile4 = "Apple";
+// let mobile5 = "Nokia";
+// let mobile6 = "realme";
+// let mobile7 = "SAMSUNG";
+
+// // <input type="checkbox" id="myCheckbox"> Click me!
+// // <div id="result"></div>
+
+// // const checkbox = document.getElementById('myCheckbox');
+// // const resultDiv = document.getElementById('result');
+
+
+function checkboxClicked(checkbox) {
+  let checked = event.target.parentElement.parentElement.parentElement;
+  let checkedInner = checked.querySelector('span');
+  let brand = checkedInner.innerHTML;
+  
+  if (checkbox.checked) {
+    filterbyBrand(brand);
+  } else {
+    removeBrandFilter(brand);
+  }
+}
+
+function filterbyBrand(brand){
+  reusableArr.forEach(element => {
+    if(brand === element.brand){
+      brandArr.push(element);
+    }
+  });
+  console.log("filtered")
+  console.log(brandArr);
+  reusableArr = [...brandArr];
+  sortmainbysortby(forContent,brandArr);
+  filterAreaOfBrand(brand);
+  
+}
+
+function removeBrandFilter(brand){
+  let removeDeleted = [];
+  removeDeleted = brandArr.filter(element =>{
+   return element.brand !== brand;
+  })
+  brandArr = [...removeDeleted];
+
+  console.log("not filtered")
+  console.log(brandArr);
+  reusableArr = [...brandArr];
+  sortmainbysortby(forContent,brandArr);
+}
+
+
+
+function filterAreaOfBrand(brand){
+  let output = `
+    <div class="area-elm" id="areaelamid">
+         <div class="forxbutton">
+           <span>✕</span>
+         </div>
+       <div class="forelmentarea">
+         <span >${min}-${max}</span>
+       </div>
+     </div>
+  `
+    
+  document.querySelector(".pricefilterare-in").innerHTML += output;
+
+}
+
+// let output =
 // `
 //       <div class="area-elm" id="areaelamid">
 //         <div class="forxbutton">
@@ -418,101 +517,11 @@ function filterAreaBuilding(min, max){
 //     document.querySelector(".pricefilterare-in").innerHTML = output;
 //     populateDropdown(document.querySelector('.minsec-inner'), minOptions, "0");
 //     populateDropdown(document.querySelector('.maxsec-inner'), maxOptions, "Max");
-//     reusableArr = [...mainarr];
-//     console.log("hai");
+//     reusableArr = [...mainArr];
 //     sortmainbysortby(forContent, reusableArr);
 //   });
 // }
-// var incr = 90;
-// var num = 0
-// const brandClick = document.querySelector(".brand-header");
-// brandClick.addEventListener('click', function(){
-//   var arrow = document.getElementById('brand_arrow');
-//   incr += 180;
-//   num += 1;
-//   arrow.style.transform = `rotate(${incr}deg)`;
-//   showBrands(num, mainarr)
-// });
 
-// // function showBrands(num, arr){
-// //  const brandName = arr.map(element=> element.brand);
-// //  let output = "";
-// //  num += 1;
-// //  for(let item of arr){
-// //   output += `
 
-// //    <div class="brand-elems">
-// //       <div class="brand-elems-in">
-// //         <div class="brand-elems-inner">
-// //           <div class="forbox">
-// //             <div class="boxlabel">
-// //               <input type="checkbox" class="forbrandselection">
-// //             </div>
-// //           </div>
-// //         <span id="brandnamedef">${item.brand}</span>
-// //       </div>
-// //     </div>
-// //   </div>
-// //   `
-// //  }
-// //  console.log(output);
-// //  document.querySelector("#brandjs").innerHTML += output;
 
-// //  if(num % 2 == 1){
-// //   output = "";
-// //   document.querySelector(".brand-body-main").innerHTML = output;
-// //  }
-// // }
 
-// function showBrands(num, arr1) {
-//   const brandName = arr1.map(element => element.brand);
-//   let output = `
-//    <div class="brand-search">
-//       <img id="searchforbrand" src="img/left-main/brand-search.svg" alt="">
-//       <input class="brandinput" type="text" placeholder="Search Brand">
-//    </div>`;
-//   num += 1;
-//   let arr = [...new Set(brandName)];
-//   for (let item of arr) {
-//       output += `
-//       <div class="brand-elems">
-//           <div class="brand-elems-in">
-//               <div class="brand-elems-inner">
-//                   <div class="forbox">
-//                       <div class="boxlabel">
-//                           <input type="checkbox" class="forbrandselection">
-//                       </div>
-//                   </div>
-//                   <span id="brandnamedef">${item}</span>
-//               </div>
-//           </div>
-//       </div>
-//       `;
-//   }
-
-//   document.querySelector(".brand-body-main").innerHTML += output;
-//   let totalBrands = document.getElementsByClassName("forbrandselection");
-//   let i = 0;
-//   for(let item of totalBrands){
-//     i += 1;
-//     item.classList.add(`brandno_${i}`);
-//   }
-
-//   if (num % 2 === 1) {
-//        document.querySelector(".brand-body-main").innerHTML = "";
-//   }
-// }
-
-// let mobile1 = "MOTOROLA";
-// let mobile2 = "REDMI";
-// let mobile3 = "POCO";
-// let mobile4 = "Apple";
-// let mobile5 = "Nokia";
-// let mobile6 = "realme";
-// let mobile7 = "SAMSUNG";
-
-// // <input type="checkbox" id="myCheckbox"> Click me!
-// // <div id="result"></div>
-
-// // const checkbox = document.getElementById('myCheckbox');
-// // const resultDiv = document.getElementById('result');

@@ -981,6 +981,10 @@ header{
   display: block;
 }
 
+#phone-name{
+  line-height: 20px;
+}
+
 .rating-field{
   margin-top: 6px;
 }

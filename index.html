@@ -74,15 +74,18 @@
               <div class="left-main-content">
                 <div class="left-main-inner-first">
                   <section class="filtersec" id="forpricefilter">
-                    <div class="filtersec-in" >
+                    <div class="filtersec-in">
                       <span id="filterdef">Filters</span>
                     </div>
-                    
-                     <div class="pricefilterarea">
+
+                    <div class="pricefilterarea">
                       <div class="pricefilterare-in">
                         <!-- forjs -->
                       </div>
-                     </div>
+                      <div class="pricefilterarea-in">
+                        <!-- forjs-->
+                      </div>
+                    </div>
                   </section>
                   <div class="categorysec">
                     <div class="categorysec-in">
@@ -170,9 +173,7 @@
                           <option value="30000" class="maxoption">
                             ₹30000
                           </option>
-                          <option value="Max" class="maxoption">
-                            ₹30000+
-                          </option>
+                          <option value="Max" class="maxoption">₹30000+</option>
                         </select>
                       </div>
                     </div>
@@ -210,8 +211,32 @@
                       <div class="brand-body-foot"></div>
                     </div>
                   </section>
-                  <section class="assuredsec"></section>
-                  <section class="ratingsec"></section>
+                  
+                  <section class="ratingsec">
+                    <div class="ratingsec-inner">
+                      <div class="customorratings">Customer Ratings</div>
+                      <img
+                        id="customerarrow"
+                        src="img/left-main/left-main-arrow.svg"
+                        alt=""
+                        onclick="customerfunction()"
+                      />
+                    </div>
+                    <div>
+                      <div class="starratings">
+                        <div class="starrating-inner">
+                          <label class="starinner">
+                            <input type="checkbox" class="forstarselection star1">
+                            <div class="stardef">4★ & above</div>
+                          </label>
+                          <label class="starinner">
+                            <input type="checkbox" class="forstarselection star2">
+                            <div class="stardef">3★ & above</div>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
                 </div>
               </div>
               <div class="left-main-content">
@@ -245,8 +270,8 @@
                     </div>
                   </div>
                   <span class="right-head-second">
-                    Showing 1 – <span id="noofmainelem"></span> results for "<span id="pagekey"
-                      >mobiles</span>"
+                    Showing 1 – <span id="noofmainelem"></span> results for
+                    "<span id="pagekey">mobiles</span>"
                   </span>
                   <div class="right-head-third">
                     <div class="sortspan">Sort By</div>
@@ -255,9 +280,7 @@
               </div>
             </div>
             <!-- fromhere js -->
-            <div class=" forjs">
-              
-            </div>
+            <div class="forjs"></div>
             <!-- upto here for js -->
           </div>
         </div>
@@ -266,3 +289,4 @@
     <script src="script.js"></script>
   </body>
 </html>
+

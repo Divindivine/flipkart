@@ -6,8 +6,6 @@ let tempArr = [];
 showmoreInncr = 0;
 wholeArr = [];
 
-
-
 function fetchdata() {
   fetch("flipkart.json")
     .then((response) => response.json())
@@ -63,8 +61,6 @@ function header(data) {
   thirddef.innerText = data.thirdlidef;
 }
 
-
-
 function naviteminner(data) {
   let output = "";
   for (let item of data) {
@@ -79,7 +75,6 @@ function naviteminner(data) {
   document.querySelector(".nav-item-inner").innerHTML = output;
 }
 
-
 function sortarea(data) {
   let output = "";
   for (let item of data) {
@@ -93,8 +88,6 @@ function sortarea(data) {
     .querySelector(".right-head-third")
     .insertAdjacentHTML("beforeend", output);
 }
-
-
 
 function sortdefaultselected() {
   const sortitems = document.querySelector(".right-head-third");
@@ -114,9 +107,8 @@ function sortaction(event) {
   prev.classList.remove("selected-sort");
   event.target.classList.add("selected-sort");
   forContent = event.target.innerText;
-  console.log(reusableArr)
+  console.log(reusableArr);
   sortmainbysortby(event.target.innerText, reusableArr);
-  
 }
 
 function sortmainbysortby(content, Arr) {
@@ -144,12 +136,17 @@ function sortmainbysortby(content, Arr) {
   }
 }
 
-
 function mainbodybuilding(data) {
   console.log(data);
-  document.getElementById("noofmainelem").innerHTML = `${data.length}`;
+  if(data.length >= 24){
+    document.getElementById("noofmainelem").innerHTML = 24;
+  }
+  else{
+    document.getElementById("noofmainelem").innerHTML = `${data.length}`;
+  }
+  document.getElementById("totalpro").innerHTML = `${data.length}`;
   let output = "";
-  if(data.length === 0){
+  if (data.length === 0) {
     output = `
       <div class="empty-div">
          <div class="empty-div-inner">
@@ -333,8 +330,6 @@ function populateDropdown(selectElement, options, selectedValue) {
 let minSelectedValue;
 let maxSelectedValue;
 
-
-
 function filterOptions() {
   const minSelect = document.querySelector(".minsec-inner");
   const maxSelect = document.querySelector(".maxsec-inner");
@@ -392,7 +387,6 @@ function minmaxAdjustMain(min, max, arr) {
     sortmainbysortby(forContent, reusableArr);
   }
 }
-
 
 function filterAreaBuilding(min, max) {
   let output = `
@@ -525,7 +519,7 @@ function filterbyBrand(brand) {
     }
   });
   console.log(brandArr);
-  minmaxAdjustMain(minSelectedValue, maxSelectedValue, brandArr)
+  minmaxAdjustMain(minSelectedValue, maxSelectedValue, brandArr);
   filterAreaOfBrand(brand);
 }
 
@@ -575,21 +569,33 @@ function filterAreaOfBrand(brand) {
 }
 
 let x = 90;
-function customerfunction(){
-  x+=180;
-  let arrow = document.getElementById('customerarrow');
+function customerfunction() {
+  x += 180;
+  let arrow = document.getElementById("customerarrow");
   arrow.style.transform = `rotate(${x}deg)`;
-  let ratings = document.querySelectorAll('.starinner');
-  ratings.forEach(element => {
-    if(element.style.display === 'block'){
-      element.style.display = 'none';
-    }
-    else{
-      element.style.display = 'block';
+  let ratings = document.querySelectorAll(".starinner");
+  ratings.forEach((element) => {
+    if (element.style.display === "block") {
+      element.style.display = "none";
+    } else {
+      element.style.display = "block";
     }
   });
 }
 
+let y = 90;
+function ramfunction() {
+  y += 180;
+  let arrow = document.getElementById('ramfilterbutton');
+  arrow.style.transform = `rotate(${y}deg)`;
+  let rams = document.querySelector('.ramsec-body');
+  if(rams.style.display === "block"){
+    rams.style.display = "none";
+  }
+  else{
+    rams.style.display = 'block';
+  }
+}
 
 
 

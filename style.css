@@ -750,6 +750,7 @@ header{
 
 .ratingsec{
   padding: 16px;
+  border-top: 1px solid #f0f0f0;
   border-bottom: 1px solid #f0f0f0;
   position: relative;
 }
@@ -779,15 +780,13 @@ header{
 }
 
 .starratings{
-  margin: 7px 0;
+  
   padding: 3px 0;
 
 }
 
 .starrating-inner{
   width: 100%;
-  display: inline-block;
-
 }
 
 .starinner{
@@ -822,6 +821,69 @@ header{
   line-height: 14px;
   cursor: pointer;
 }
+
+.ramsec{
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  position: relative;
+}
+
+.ramsec-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: -16px;
+  padding: 16px;
+}
+
+.ram-def{
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  display: inline-block;
+  width: 95%;
+}as
+
+.ramsec-header img{
+  display: inline-block;
+  cursor: pointer;
+  width: 6px;
+  height: 11px;
+  transform: rotate(90deg);
+}
+
+.ramsec-body{
+  display: none;
+}
+
+.ramsec-inner{
+  margin: 7px 0;
+  padding: 6px 0;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  position: relative;
+}
+
+/* .forramselection{
+  
+} */
+
+.rams{
+  vertical-align: middle;
+  font-size: 14px;
+  padding-left: 11px;
+  color: #212121;
+  display: inline-block;
+  width: calc(100% - 25px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 14px;
+  cursor: pointer;
+}
+
 
 .left-main-inner-second{
   text-align: center;

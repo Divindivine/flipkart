@@ -107,7 +107,6 @@ function sortaction(event) {
   prev.classList.remove("selected-sort");
   event.target.classList.add("selected-sort");
   forContent = event.target.innerText;
-  console.log(reusableArr);
   sortmainbysortby(event.target.innerText, reusableArr);
 }
 
@@ -115,7 +114,6 @@ function sortmainbysortby(content, Arr) {
   if (Arr == undefined) {
     Arr = [...mainArr];
   }
-  console.log(Arr);
   if (content === "Relevance") {
     Arr.sort((a, b) => a.index - b.index);
     mainbodybuilding(Arr);
@@ -137,7 +135,6 @@ function sortmainbysortby(content, Arr) {
 }
 
 function mainbodybuilding(data) {
-  console.log(data);
   if(data.length >= 24){
     document.getElementById("noofmainelem").innerHTML = 24;
   }
@@ -366,9 +363,7 @@ document
   .addEventListener("change", filterOptions);
 
 function minmaxAdjustMain(min, max, arr) {
-  console.log("hai");
   reusableArr = [...arr];
-  console.log(reusableArr);
   if (min === "0" && max === "Max") {
     sortmainbysortby(forContent, reusableArr);
   } else if (max === "Max") {
@@ -383,7 +378,6 @@ function minmaxAdjustMain(min, max, arr) {
     reusableArr = arr.filter(
       (element) => element.price >= min && element.price <= max
     );
-    console.log(arr);
     sortmainbysortby(forContent, reusableArr);
   }
 }
@@ -465,7 +459,6 @@ function showBrands(num, arr1) {
   let totalBrands = document.getElementsByClassName("brand-elems");
   let i = 0;
   for (let item of totalBrands) {
-    console.log(i);
     i += 1;
     item.classList.add(`brandno_${i}`);
     if (i > 6) {
@@ -499,18 +492,23 @@ function showBrands(num, arr1) {
   }
 }
 
+//////////////////////////////////////////////////////firstfilter
+
+
+
 function checkboxClicked(checkbox) {
   let checked = event.target.parentElement.parentElement.parentElement;
   let checkedInner = checked.querySelector("span");
   let brand = checkedInner.innerHTML;
-
+  
   if (checkbox.checked) {
-    console.log(brand);
     filterbyBrand(brand);
   } else {
     removeBrandFilter(brand);
+    console.log(brand);
   }
 }
+
 
 function filterbyBrand(brand) {
   mainArr.forEach((element) => {
@@ -518,15 +516,16 @@ function filterbyBrand(brand) {
       brandArr.push(element);
     }
   });
-  console.log(brandArr);
   minmaxAdjustMain(minSelectedValue, maxSelectedValue, brandArr);
   filterAreaOfBrand(brand);
 }
 
-function removeBrandFilter(brand) {
+function removeBrandFilter(filterItem) {
+  
+  console.log(filterItem);
   let removeDeleted = [];
   removeDeleted = brandArr.filter((element) => {
-    return element.brand !== brand;
+    return element.brand !== filterItem;
   });
   brandArr = [...removeDeleted];
 
@@ -537,17 +536,17 @@ function removeBrandFilter(brand) {
   }
 }
 
-function filterAreaOfBrand(brand) {
+function filterAreaOfBrand(filterItem) {
   let output = `
     <div class="area-elm" id="areaelamid2">
          <div class="forxbutton">
            <span>✕</span>
          </div>
        <div class="forelmentarea">
-         <span >${brand}</span>
+         <span >${filterItem}</span>
        </div>
-     </div>
   `;
+  
 
   document.querySelector(".pricefilterarea-in").innerHTML += output;
   const selcetedElem = document.querySelector("#areaelamid2");
@@ -556,17 +555,18 @@ function filterAreaOfBrand(brand) {
     let child1 = document.getElementsByClassName("area-elm");
     let child2 = document.getElementsByClassName("forelmentarea");
     let children = event.currentTarget.children;
-    console.log(children);
     let childrenArray = Array.from(children);
     childrenArray.forEach((child) => {
       if (child.classList.contains("forelmentarea")) {
-        console.log("hai");
       }
     });
-    if (children.classList.contains("forelmentarea"))
-      console.log(event.currentTarget.innerHTML);
+    if (children.classList.contains("forelmentarea")){
+    }
   });
 }
+
+///////////////////////////////////////////////////////////////secondfilter
+
 
 let x = 90;
 function customerfunction() {
@@ -583,6 +583,22 @@ function customerfunction() {
   });
 }
 
+function ratingClicked(checkbox) {
+  let checked = event.target.parentElement;
+  let checkedInner = checked.querySelector("div");
+  let starRating = checkedInner.innerHTML;
+  
+
+  if(checkbox.checked){
+    filterbyBrand(starRating);
+  }
+  else{
+    removeBrandFilter(starRating);
+  }
+}
+
+//////////////////////////////////////////////////thirdfilter
+
 let y = 90;
 function ramfunction() {
   y += 180;
@@ -597,5 +613,15 @@ function ramfunction() {
   }
 }
 
-
+function ramClicked(checkbox){
+  let checked = event.target.parentElement;
+  let checkedInner = checked.querySelector("div");
+  let ram = checkedInner.innerHTML;
+  if(checkbox.checked){
+    filterbyBrand(ram);
+  }
+  else{
+    removeBrandFilter(ram);
+  }
+}
 

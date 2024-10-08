@@ -3,8 +3,13 @@ let reusableArr = [];
 let forContent = "Relevance";
 let brandArr = [];
 let tempArr = [];
-showmoreInncr = 0;
-wholeArr = [];
+let showmoreInncr = 0;
+let wholeArr = [];
+let arrayIndex = 0;
+let neededElements = 0;
+let tempneeded = 0;
+let mainData;
+let filteredArr;
 
 function fetchdata() {
   fetch("flipkart.json")
@@ -31,6 +36,7 @@ function copydata(products) {
   });
   wholeArr = [...mainArr];
   reusableArr = [...mainArr];
+  filteredArr = [...mainArr];
 }
 
 function header(data) {
@@ -111,9 +117,9 @@ function sortaction(event) {
 }
 
 function sortmainbysortby(content, Arr) {
-  if (Arr == undefined) {
-    Arr = [...mainArr];
-  }
+  // if (Arr == undefined) {
+  //   Arr = [...mainArr];
+  // }
   if (content === "Relevance") {
     Arr.sort((a, b) => a.index - b.index);
     mainbodybuilding(Arr);
@@ -135,13 +141,6 @@ function sortmainbysortby(content, Arr) {
 }
 
 function mainbodybuilding(data) {
-  if(data.length >= 24){
-    document.getElementById("noofmainelem").innerHTML = 24;
-  }
-  else{
-    document.getElementById("noofmainelem").innerHTML = `${data.length}`;
-  }
-  document.getElementById("totalpro").innerHTML = `${data.length}`;
   let output = "";
   if (data.length === 0) {
     output = `
@@ -155,117 +154,127 @@ function mainbodybuilding(data) {
       </div>
   `;
   }
+  if (data.length >= 24) {
+    document.getElementById("noofmainelem").innerHTML = 24;
+  } else {
+    document.getElementById("noofmainelem").innerHTML = `${data.length}`;
+  }
+  document.getElementById("totalpro").innerHTML = `${data.length}`;
   for (let item of data) {
-    output += `
-     <div class="right-main-elem">
-              <div class="right-main-elemin">
-                <div class="right-main-elem-inner">
-                  <div class="right-main-elem-div">
-                    <a href="" class="right-main-elem-link">
-                      <div class="elem-left">
-                        <div class="elem-left-first">
-                          <div class="elem-left-first-in">
-                            <div class="elem-left-first-inner">
-                              <img
-                                id="mobilepic"
-                                src="${item.images[0]}"
-                                alt=""
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div class="elem-left-second">
-                          <div class="elem-left-second-in">
-                            <span class="forbox">
-                              <label for="" class="boxlabel">
-                                <input type="checkbox" class="forcompinput" />
-                              </label>
-                            </span>
-                            <label for="" class="forcompare">
-                              <span>Add to Compare</span>
-                            </label>
-                          </div>
-                        </div>
-                        <div class="elem-left-third">
-                          <div class="elem-left-third-in">
-                            <img src="img/right-main/like.svg" alt="" />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="elem-right">
-                        <div class="elem-right-left">
-                          <div class="name-field">
-                            <span id="phone-name">${item.title}</span>
-                          </div>
-                          <div class="rating-field">
-                            <span id="starrating">
-                              <div class="star-rating-inner">
-                                <span id="starratingno">${
-                                  item.rating.average
-                                }</span>
-                                <img src="img/right-main/star.svg" alt="">
-                              </div>
-                            </span>
-                            <span id="ratingnreview">
-                              <span>
-                                <span id="noofratings">${
-                                  item.rating.count
-                                } Ratings</span>
-                                <span id="ratingand">&</span>
-                                <span id="noofreviews">${
-                                  item.rating.reviewCount
-                                } Reviews</span>
-                              </span>
-                            </span>
-                          </div>
-                          <div class="spec-field">
-                            <ul class="specfieldinner">${specbulider(
-                              item.highlights
-                            )}</ul>
-                          </div>
-                        </div>
-                        <div class="elem-right-right">
-                          <div class="elem-right-right-first">
-                            <div class="sectionprice">
-                              <div class="pricearea">
-                                <span id="priceamount">₹${item.price}</span>
-                              </div>
-                              <div class="mrparea">
-                                <span>₹<span id="mrpamount">${
-                                  item.mrp
-                                }</span></span>
-                              </div>
-                              <div class="aboutoffer">
-                                <span id="offerdef">${offercalc(
-                                  item.price,
-                                  item.mrp
-                                )}% off</span>
-                              </div>
-                            </div>
-                            <div class="aboutdelivery">
-                              <div>
-                                  <div class="aboutdelivery-inner">
-                                    <span>Free delivery</span>
-                                  </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="elem-right-right-second">
-                            <img src="img/right-main/filpassure.png" alt="">
-                          </div>
-                          <div class="elem-right-right-third">
-                            <div class="elem-right-right-third-inner">
-                              <span id="saverdeal">Saver Deal</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div> 
-      `;
+    arrayIndex++;
+    if (neededElements < arrayIndex && tempneeded <= 24) {
+      tempneeded++;
+      output += `
+      <div class="right-main-elem">
+               <div class="right-main-elemin">
+                 <div class="right-main-elem-inner">
+                   <div class="right-main-elem-div">
+                     <a href="" class="right-main-elem-link">
+                       <div class="elem-left">
+                         <div class="elem-left-first">
+                           <div class="elem-left-first-in">
+                             <div class="elem-left-first-inner">
+                               <img
+                                 id="mobilepic"
+                                 src="${item.images[0]}"
+                                 alt=""
+                               />
+                             </div>
+                           </div>
+                         </div>
+                         <div class="elem-left-second">
+                           <div class="elem-left-second-in">
+                             <span class="forbox">
+                               <label for="" class="boxlabel">
+                                 <input type="checkbox" class="forcompinput" />
+                               </label>
+                             </span>
+                             <label for="" class="forcompare">
+                               <span>Add to Compare</span>
+                             </label>
+                           </div>
+                         </div>
+                         <div class="elem-left-third">
+                           <div class="elem-left-third-in">
+                             <img src="img/right-main/like.svg" alt="" />
+                           </div>
+                         </div>
+                       </div>
+                       <div class="elem-right">
+                         <div class="elem-right-left">
+                           <div class="name-field">
+                             <span id="phone-name">${item.title}</span>
+                           </div>
+                           <div class="rating-field">
+                             <span id="starrating">
+                               <div class="star-rating-inner">
+                                 <span id="starratingno">${
+                                   item.rating.average
+                                 }</span>
+                                 <img src="img/right-main/star.svg" alt="">
+                               </div>
+                             </span>
+                             <span id="ratingnreview">
+                               <span>
+                                 <span id="noofratings">${
+                                   item.rating.count
+                                 } Ratings</span>
+                                 <span id="ratingand">&</span>
+                                 <span id="noofreviews">${
+                                   item.rating.reviewCount
+                                 } Reviews</span>
+                               </span>
+                             </span>
+                           </div>
+                           <div class="spec-field">
+                             <ul class="specfieldinner">${specbulider(
+                               item.highlights
+                             )}</ul>
+                           </div>
+                         </div>
+                         <div class="elem-right-right">
+                           <div class="elem-right-right-first">
+                             <div class="sectionprice">
+                               <div class="pricearea">
+                                 <span id="priceamount">₹${item.price}</span>
+                               </div>
+                               <div class="mrparea">
+                                 <span>₹<span id="mrpamount">${
+                                   item.mrp
+                                 }</span></span>
+                               </div>
+                               <div class="aboutoffer">
+                                 <span id="offerdef">${offercalc(
+                                   item.price,
+                                   item.mrp
+                                 )}% off</span>
+                               </div>
+                             </div>
+                             <div class="aboutdelivery">
+                               <div>
+                                   <div class="aboutdelivery-inner">
+                                     <span>Free delivery</span>
+                                   </div>
+                               </div>
+                             </div>
+                           </div>
+                           <div class="elem-right-right-second">
+                             <img src="img/right-main/filpassure.png" alt="">
+                           </div>
+                           <div class="elem-right-right-third">
+                             <div class="elem-right-right-third-inner">
+                               <span id="saverdeal">Saver Deal</span>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                     </a>
+                   </div>
+                 </div>
+               </div>
+             </div> 
+       `;
+    }
   }
 
   function specbulider(spec) {
@@ -286,6 +295,45 @@ function mainbodybuilding(data) {
   }
 
   document.querySelector(".forjs").innerHTML = output;
+  mainData = [...data];
+  createPagination(mainData);
+  tempneeded = 0;
+  arrayIndex = 0;
+}
+
+function createPagination(data) {
+  const paginationArea = document.getElementById("pagination");
+  let output = "";
+  let index = 0;
+  let counter = data.length;
+
+  while (counter > 24) {
+    index++;
+    counter = counter - 24;
+
+    output += `<div class="pageno">${index}</div>`;
+  }
+  output += `<div class="pageno">${index + 1}</div>`;
+  paginationArea.innerHTML = output;
+  paginationArea.firstElementChild.classList.add("isActive");
+  const pages = document.getElementsByClassName("pageno");
+  for (items of pages) {
+    items.addEventListener("click", setPagination);
+  }
+}
+
+function setPagination(event) {
+  neededElements = event.target.innerHTML * 24 - 24;
+  console.log(neededElements);
+  mainbodybuilding(mainData);
+  const pages = document.getElementsByClassName("pageno");
+  for (items of pages) {
+    if (items.innerHTML === event.target.innerHTML) {
+      items.classList.add("isActive");
+    } else {
+      items.classList.remove("isActive");
+    }
+  }
 }
 
 minOptions = [
@@ -327,7 +375,10 @@ function populateDropdown(selectElement, options, selectedValue) {
 let minSelectedValue;
 let maxSelectedValue;
 
-function filterOptions() {
+function filterOptions(arr) {
+  if(arr === undefined){
+    arr = [...wholeArr]
+  }
   const minSelect = document.querySelector(".minsec-inner");
   const maxSelect = document.querySelector(".maxsec-inner");
   minSelectedValue = minSelect.value;
@@ -348,22 +399,22 @@ function filterOptions() {
 
   populateDropdown(minSelect, filteredMinOptions, minSelectedValue);
   populateDropdown(maxSelect, filteredMaxOptions, maxSelectedValue);
-  minmaxAdjustMain(minSelectedValue, maxSelectedValue, wholeArr);
+  minmaxAdjustMain(minSelectedValue, maxSelectedValue, arr);
   filterAreaBuilding(minSelectedInner, maxSelectedInner);
 }
 
 populateDropdown(document.querySelector(".minsec-inner"), minOptions, "0");
 populateDropdown(document.querySelector(".maxsec-inner"), maxOptions, "Max");
 
-document
-  .querySelector(".minsec-inner")
-  .addEventListener("change", filterOptions);
-document
-  .querySelector(".maxsec-inner")
-  .addEventListener("change", filterOptions);
+document.querySelector(".minsec-inner").addEventListener("change", () => {
+  universalSortAndFilter(wholeArr, 1);
+});
+document.querySelector(".maxsec-inner").addEventListener("change", () => {
+  universalSortAndFilter(wholeArr, 1);
+});
 
 function minmaxAdjustMain(min, max, arr) {
-  reusableArr = [...arr];
+  // reusableArr = [...arr];
   if (min === "0" && max === "Max") {
     sortmainbysortby(forContent, reusableArr);
   } else if (max === "Max") {
@@ -378,7 +429,7 @@ function minmaxAdjustMain(min, max, arr) {
     reusableArr = arr.filter(
       (element) => element.price >= min && element.price <= max
     );
-    sortmainbysortby(forContent, reusableArr);
+    sortmainbysortby(forContent, arr);
   }
 }
 
@@ -405,8 +456,11 @@ function filterAreaBuilding(min, max) {
       maxOptions,
       "Max"
     );
-    sortmainbysortby(forContent, reusableArr);
   });
+}
+
+function universalSortAndFilter(arr, b){
+  
 }
 
 var incr = 90;
@@ -440,7 +494,7 @@ function showBrands(num, arr1) {
               <div class="brand-elems-inner">
                   <div class="forbox">
                       <div class="boxlabel">
-                          <input type="checkbox" class="forbrandselection" onclick="checkboxClicked(this)">
+                          <input type="checkbox" class="forbrandselection" onclick="checkboxClickedOfBrand(this)">
                       </div>
                   </div>
                   <span id="brandnamedef">${item}</span>
@@ -492,23 +546,19 @@ function showBrands(num, arr1) {
   }
 }
 
-//////////////////////////////////////////////////////firstfilter
-
-
-
-function checkboxClicked(checkbox) {
+function checkboxClickedOfBrand(checkbox) {
   let checked = event.target.parentElement.parentElement.parentElement;
   let checkedInner = checked.querySelector("span");
   let brand = checkedInner.innerHTML;
-  
+
   if (checkbox.checked) {
     filterbyBrand(brand);
   } else {
     removeBrandFilter(brand);
+    
     console.log(brand);
   }
 }
-
 
 function filterbyBrand(brand) {
   mainArr.forEach((element) => {
@@ -516,23 +566,24 @@ function filterbyBrand(brand) {
       brandArr.push(element);
     }
   });
-  minmaxAdjustMain(minSelectedValue, maxSelectedValue, brandArr);
-  filterAreaOfBrand(brand);
+  
+   universalSortAndFilter(brandArr, 2)
+  // minmaxAdjustMain(minSelectedValue, maxSelectedValue, brandArr);
+  // filterAreaOfBrand(brand);
 }
 
 function removeBrandFilter(filterItem) {
-  
   console.log(filterItem);
   let removeDeleted = [];
   removeDeleted = brandArr.filter((element) => {
     return element.brand !== filterItem;
   });
-  brandArr = [...removeDeleted];
-
-  reusableArr = [...brandArr];
-  sortmainbysortby(forContent, brandArr);
+ 
   if (brandArr.length === 0) {
-    sortmainbysortby(forContent, reusableArr);
+    universalSortAndFilter(mainArr, 2)
+  }
+  else{
+    universalSortAndFilter(removeDeleted, 2)
   }
 }
 
@@ -546,7 +597,6 @@ function filterAreaOfBrand(filterItem) {
          <span >${filterItem}</span>
        </div>
   `;
-  
 
   document.querySelector(".pricefilterarea-in").innerHTML += output;
   const selcetedElem = document.querySelector("#areaelamid2");
@@ -560,13 +610,12 @@ function filterAreaOfBrand(filterItem) {
       if (child.classList.contains("forelmentarea")) {
       }
     });
-    if (children.classList.contains("forelmentarea")){
+    if (children.classList.contains("forelmentarea")) {
     }
   });
 }
 
-///////////////////////////////////////////////////////////////secondfilter
-
+/////secondfilter
 
 let x = 90;
 function customerfunction() {
@@ -587,41 +636,38 @@ function ratingClicked(checkbox) {
   let checked = event.target.parentElement;
   let checkedInner = checked.querySelector("div");
   let starRating = checkedInner.innerHTML;
-  
 
-  if(checkbox.checked){
+  if (checkbox.checked) {
     filterbyBrand(starRating);
-  }
-  else{
+  } else {
     removeBrandFilter(starRating);
   }
 }
 
-//////////////////////////////////////////////////thirdfilter
+/////thirdfilter
 
 let y = 90;
 function ramfunction() {
   y += 180;
-  let arrow = document.getElementById('ramfilterbutton');
+  let arrow = document.getElementById("ramfilterbutton");
   arrow.style.transform = `rotate(${y}deg)`;
-  let rams = document.querySelector('.ramsec-body');
-  if(rams.style.display === "block"){
+  let rams = document.querySelector(".ramsec-body");
+  if (rams.style.display === "block") {
     rams.style.display = "none";
-  }
-  else{
-    rams.style.display = 'block';
+  } else {
+    rams.style.display = "block";
   }
 }
 
-function ramClicked(checkbox){
+function ramClicked(checkbox) {
   let checked = event.target.parentElement;
   let checkedInner = checked.querySelector("div");
   let ram = checkedInner.innerHTML;
-  if(checkbox.checked){
+  if (checkbox.checked) {
     filterbyBrand(ram);
-  }
-  else{
+  } else {
     removeBrandFilter(ram);
   }
 }
+
 

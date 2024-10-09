@@ -12,6 +12,7 @@ let neededElements = 0;
 let tempneeded = 0;
 let mainData;
 let filteredArr;
+let filterdarr;
 
 function fetchdata() {
   fetch("flipkart.json")
@@ -39,6 +40,8 @@ function copydata(products) {
   wholeArr = [...mainArr];
   reusableArr = [...mainArr];
   filteredArr = [...mainArr];
+  filterdarr = [...mainArr]
+
 }
 
 function header(data) {
@@ -115,13 +118,10 @@ function sortaction(event) {
   prev.classList.remove("selected-sort");
   event.target.classList.add("selected-sort");
   forContent = event.target.innerText;
-  sortmainbysortby(event.target.innerText, reusableArr);
+  sortmainbysortby(event.target.innerText, filterdarr);
 }
 
 function sortmainbysortby(content, Arr) {
-  if (Arr == undefined) {
-    Arr = [...reusableArr];
-  }
   if (content === "Relevance") {
     Arr.sort((a, b) => a.index - b.index);
     mainbodybuilding(Arr);
@@ -401,7 +401,6 @@ function filterOptions(arr) {
 
   populateDropdown(minSelect, filteredMinOptions, minSelectedValue);
   populateDropdown(maxSelect, filteredMaxOptions, maxSelectedValue);
-  minmaxAdjustMain(minSelectedValue, maxSelectedValue, arr);
   filterAreaBuilding(minSelectedInner, maxSelectedInner);
 }
 
@@ -415,25 +414,25 @@ document.querySelector(".maxsec-inner").addEventListener("change", () => {
   universalSortAndFilter(wholeArr, 1);
 });
 
-function minmaxAdjustMain(min, max, arr) {
-  reusableArr = [...arr];
-  if (min === "0" && max === "Max") {
-    sortmainbysortby(forContent, reusableArr);
-  } else if (max === "Max") {
-    reusableArr = arr.filter((element) => element.price >= min);
-    sortmainbysortby(forContent, reusableArr);
-  } else if (min === "0") {
-    reusableArr = arr.filter((element) => element.price <= max);
-    sortmainbysortby(forContent, reusableArr);
-  } else {
-    const maxValueSelect = document.querySelector(".maxsec-inner");
-    const max = maxValueSelect.value;
-    reusableArr = arr.filter(
-      (element) => element.price >= min && element.price <= max
-    );
-    sortmainbysortby(forContent, reusableArr);
-  }
-}
+// function minmaxAdjustMain(min, max, arr) {
+//   reusableArr = [...arr];
+//   if (min === "0" && max === "Max") {
+//     sortmainbysortby(forContent, reusableArr);
+//   } else if (max === "Max") {
+//     reusableArr = arr.filter((element) => element.price >= min);
+//     sortmainbysortby(forContent, reusableArr);
+//   } else if (min === "0") {
+//     reusableArr = arr.filter((element) => element.price <= max);
+//     sortmainbysortby(forContent, reusableArr);
+//   } else {
+//     const maxValueSelect = document.querySelector(".maxsec-inner");
+//     const max = maxValueSelect.value;
+//     reusableArr = arr.filter(
+//       (element) => element.price >= min && element.price <= max
+//     );
+//     sortmainbysortby(forContent, reusableArr);
+//   }
+// }
 
 function filterAreaBuilding(min, max) {
   let output = `
@@ -458,6 +457,9 @@ function filterAreaBuilding(min, max) {
       maxOptions,
       "Max"
     );
+    minSelectedValue = 0;
+    maxSelectedValue = "Max"
+    applyAllFilters();
   });
 }
 
@@ -466,7 +468,8 @@ function universalSortAndFilter(arr) {
 }
 
 function applyAllFilters() {
-  let filterdarr = mainArr;
+  console.log("called")
+  filterdarr = mainArr;
   filterdarr = applyPriceFilter(filterdarr);
   if (appliedBrands.size > 0) {
     filterdarr = filterdarr.filter((item) => appliedBrands.has(item.brand));
@@ -601,7 +604,6 @@ document.querySelector(".maxsec-inner").addEventListener("change", () => {
   applyAllFilters();
 });
 
-/////secondfilter
 
 let x = 90;
 function customerfunction() {
@@ -649,7 +651,6 @@ function filterbyRating(arr) {
   return [...new Set(temp)];
 }
 
-/////thirdfilter
 
 let y = 90;
 function ramfunction() {

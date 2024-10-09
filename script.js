@@ -120,7 +120,7 @@ function sortaction(event) {
 
 function sortmainbysortby(content, Arr) {
   if (Arr == undefined) {
-    Arr = [...mainArr];
+    Arr = [...reusableArr];
   }
   if (content === "Relevance") {
     Arr.sort((a, b) => a.index - b.index);
@@ -416,7 +416,7 @@ document.querySelector(".maxsec-inner").addEventListener("change", () => {
 });
 
 function minmaxAdjustMain(min, max, arr) {
-   reusableArr = [...arr];
+  reusableArr = [...arr];
   if (min === "0" && max === "Max") {
     sortmainbysortby(forContent, reusableArr);
   } else if (max === "Max") {
@@ -431,7 +431,7 @@ function minmaxAdjustMain(min, max, arr) {
     reusableArr = arr.filter(
       (element) => element.price >= min && element.price <= max
     );
-    sortmainbysortby(forContent, arr);
+    sortmainbysortby(forContent, reusableArr);
   }
 }
 
@@ -458,13 +458,42 @@ function filterAreaBuilding(min, max) {
       maxOptions,
       "Max"
     );
-    
   });
-
 }
 
-function universalSortAndFilter(arr, b) {
+function universalSortAndFilter(arr) {
   filterOptions(arr);
+}
+
+function applyAllFilters() {
+  let filterdarr = mainArr;
+  filterdarr = applyPriceFilter(filterdarr);
+  if (appliedBrands.size > 0) {
+    filterdarr = filterdarr.filter((item) => appliedBrands.has(item.brand));
+  }
+  if (appliedRatings.size > 0) {
+    filterdarr = filterbyRating(filterdarr);
+  }
+  if (appliedRam.size > 0) {
+    filterdarr = filterbyRam(filterdarr);
+  }
+  sortmainbysortby(forContent, filterdarr);
+}
+
+function applyPriceFilter(arr) {
+  let min = minSelectedValue || 0;
+  let max = maxSelectedValue || "Max";
+  if (min === "0" && max === "Max") {
+    return arr;
+  } else if (max === "Max") {
+    return arr.filter((element) => element.price >= min);
+  } else if (min === "0") {
+    return arr.filter((element) => element.price <= max);
+  } else {
+    return arr.filter(
+      (element) => element.price >= min && element.price <= max
+    );
+  }
 }
 
 var incr = 90;
@@ -550,45 +579,27 @@ function showBrands(num, arr1) {
   }
 }
 
+let appliedBrands = new Set();
+
 function checkboxClickedOfBrand(checkbox) {
   let checked = event.target.parentElement.parentElement.parentElement;
   let checkedInner = checked.querySelector("span");
   let brand = checkedInner.innerHTML;
 
   if (checkbox.checked) {
-    filterbyBrand(brand);
+    appliedBrands.add(brand);
   } else {
-    removeBrandFilter(brand);
+    appliedBrands.delete(brand);
   }
+  applyAllFilters();
 }
 
-function filterbyBrand(brand) {
-  wholeArr.forEach((element) => {
-    if (brand === element.brand) {
-      brandArr.push(element);
-    }
-  });
-wholeArr = [...brandArr]
-  universalSortAndFilter(brandArr, 2);
-}
-
-function removeBrandFilter(filterItem) {
-  let removeDeleted = [];
-  removeDeleted = brandArr.filter((element) => {
-    return element.brand !== filterItem;
-  });
-
-  brandArr = [];
-  brandArr = [...removeDeleted];
-
-  if (brandArr.length === 0) {
-    universalSortAndFilter(mainArr, 2);
-  } else {
-    universalSortAndFilter(brandArr, 2);
-  }
-}
-
-
+document.querySelector(".minsec-inner").addEventListener("change", () => {
+  applyAllFilters();
+});
+document.querySelector(".maxsec-inner").addEventListener("change", () => {
+  applyAllFilters();
+});
 
 /////secondfilter
 
@@ -607,60 +618,35 @@ function customerfunction() {
   });
 }
 
+let appliedRatings = new Set();
+
 function ratingClicked(checkbox) {
   let checked = event.target.parentElement;
   let checkedInner = checked.querySelector("div");
   let starRating = checkedInner.innerHTML;
-  console.log(starRating);
   if (checkbox.checked) {
-    filterbyRating(starRating);
+    appliedRatings.add(starRating);
   } else {
-    removeBrandRating(starRating);
+    appliedRatings.delete(starRating);
   }
+  applyAllFilters();
 }
 
 let temp = [];
 
-function filterbyRating(starRating) {
-  wholeArr.forEach((element) => {
-    if (starRating === "4★ &amp; above") {
-      if (element.rating.average > 4) {
+function filterbyRating(arr) {
+  temp = [];
+  arr.forEach((element) => {
+    appliedRatings.forEach((elem) => {
+      if (elem === "4★ &amp; above" && element.rating.average > 4) {
         temp.push(element);
       }
-    }
-    if (starRating === "3★ &amp; above") {
-      if (element.rating.average > 3) {
+      if (elem === "3★ &amp; above" && element.rating.average > 3) {
         temp.push(element);
       }
-    }
+    });
   });
-  ratingArr = [...new Set(temp)];
-  wholeArr = [...ratingArr]
-  universalSortAndFilter(ratingArr, 3);
-}
-
-function removeBrandRating(starRating) {
-  let removeDeleted = [];
-  removeDeleted = ratingArr.filter((element) => {
-    if(starRating === "4★ &amp; above") {
-      if (element.rating.average >= 4) {
-          return element;
-      }
-    }
-    if (starRating === "3★ &amp; above") {
-      if ( element.rating.average > 3 && element.rating.average < 4) {
-        return element;
-      }
-    } 
-  })
-  ratingArr = [];
-  ratingArr = [...removeDeleted];
-  if(ratingArr.length === 0){
-    universalSortAndFilter(mainArr, 2)
-  }
-  else{
-    universalSortAndFilter(ratingArr, 2)
-  }
+  return [...new Set(temp)];
 }
 
 /////thirdfilter
@@ -678,41 +664,28 @@ function ramfunction() {
   }
 }
 
+let appliedRam = new Set();
+
 function ramClicked(checkbox) {
   let checked = event.target.parentElement;
   let checkedInner = checked.querySelector("div");
   let ram = checkedInner.innerHTML;
   if (checkbox.checked) {
-    filterbyRam(ram);
+    appliedRam.add(ram);
   } else {
-    removeRam(ram);
+    appliedRam.delete(ram);
   }
+  applyAllFilters();
 }
 
-function filterbyRam(ram){
-  wholeArr.forEach((element,index) => {
-    if((element.subTitle.slice(0,1)) === (ram.slice(0,1))){
-      ramArr.push(element)
-    }
-  })
-  wholeArr= [...ramArr]
-  universalSortAndFilter(ramArr, 4)
-}
-
-function removeRam(ram){
-  let removeDeleted = [];
-  removeDeleted = ramArr.filter((element) => {
-    return (element.subTitle.slice(0,1)) !== (ram.slice(0,1))
+function filterbyRam(arr) {
+  let ramArr = [];
+  arr.forEach((element) => {
+    appliedRam.forEach((ram) => {
+      if (element.subTitle.includes(ram)) {
+        ramArr.push(element);
+      }
+    });
   });
-
-  ramArr = [];
-  ramArr = [...removeDeleted];
-console.log(ramArr.length)
-  if(ramArr.length === 0){
-    universalSortAndFilter(mainArr, 4);
-  }
-  else{
-    universalSortAndFilter(ramArr, 4)
-  }
+  return ramArr;
 }
-

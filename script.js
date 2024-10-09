@@ -2,6 +2,8 @@ let mainArr = [];
 let reusableArr = [];
 let forContent = "Relevance";
 let brandArr = [];
+let ratingArr = [];
+let ramArr = [];
 let tempArr = [];
 let showmoreInncr = 0;
 let wholeArr = [];
@@ -117,9 +119,9 @@ function sortaction(event) {
 }
 
 function sortmainbysortby(content, Arr) {
-  // if (Arr == undefined) {
-  //   Arr = [...mainArr];
-  // }
+  if (Arr == undefined) {
+    Arr = [...mainArr];
+  }
   if (content === "Relevance") {
     Arr.sort((a, b) => a.index - b.index);
     mainbodybuilding(Arr);
@@ -376,8 +378,8 @@ let minSelectedValue;
 let maxSelectedValue;
 
 function filterOptions(arr) {
-  if(arr === undefined){
-    arr = [...wholeArr]
+  if (arr === undefined) {
+    arr = [...wholeArr];
   }
   const minSelect = document.querySelector(".minsec-inner");
   const maxSelect = document.querySelector(".maxsec-inner");
@@ -414,7 +416,7 @@ document.querySelector(".maxsec-inner").addEventListener("change", () => {
 });
 
 function minmaxAdjustMain(min, max, arr) {
-  // reusableArr = [...arr];
+   reusableArr = [...arr];
   if (min === "0" && max === "Max") {
     sortmainbysortby(forContent, reusableArr);
   } else if (max === "Max") {
@@ -456,11 +458,13 @@ function filterAreaBuilding(min, max) {
       maxOptions,
       "Max"
     );
+    
   });
+
 }
 
-function universalSortAndFilter(arr, b){
-  
+function universalSortAndFilter(arr, b) {
+  filterOptions(arr);
 }
 
 var incr = 90;
@@ -555,65 +559,36 @@ function checkboxClickedOfBrand(checkbox) {
     filterbyBrand(brand);
   } else {
     removeBrandFilter(brand);
-    
-    console.log(brand);
   }
 }
 
 function filterbyBrand(brand) {
-  mainArr.forEach((element) => {
+  wholeArr.forEach((element) => {
     if (brand === element.brand) {
       brandArr.push(element);
     }
   });
-  
-   universalSortAndFilter(brandArr, 2)
-  // minmaxAdjustMain(minSelectedValue, maxSelectedValue, brandArr);
-  // filterAreaOfBrand(brand);
+wholeArr = [...brandArr]
+  universalSortAndFilter(brandArr, 2);
 }
 
 function removeBrandFilter(filterItem) {
-  console.log(filterItem);
   let removeDeleted = [];
   removeDeleted = brandArr.filter((element) => {
     return element.brand !== filterItem;
   });
- 
+
+  brandArr = [];
+  brandArr = [...removeDeleted];
+
   if (brandArr.length === 0) {
-    universalSortAndFilter(mainArr, 2)
-  }
-  else{
-    universalSortAndFilter(removeDeleted, 2)
+    universalSortAndFilter(mainArr, 2);
+  } else {
+    universalSortAndFilter(brandArr, 2);
   }
 }
 
-function filterAreaOfBrand(filterItem) {
-  let output = `
-    <div class="area-elm" id="areaelamid2">
-         <div class="forxbutton">
-           <span>✕</span>
-         </div>
-       <div class="forelmentarea">
-         <span >${filterItem}</span>
-       </div>
-  `;
 
-  document.querySelector(".pricefilterarea-in").innerHTML += output;
-  const selcetedElem = document.querySelector("#areaelamid2");
-  selcetedElem.addEventListener("click", function (event) {
-    let parent = document.querySelector(".pricefilterarea-in");
-    let child1 = document.getElementsByClassName("area-elm");
-    let child2 = document.getElementsByClassName("forelmentarea");
-    let children = event.currentTarget.children;
-    let childrenArray = Array.from(children);
-    childrenArray.forEach((child) => {
-      if (child.classList.contains("forelmentarea")) {
-      }
-    });
-    if (children.classList.contains("forelmentarea")) {
-    }
-  });
-}
 
 /////secondfilter
 
@@ -636,11 +611,55 @@ function ratingClicked(checkbox) {
   let checked = event.target.parentElement;
   let checkedInner = checked.querySelector("div");
   let starRating = checkedInner.innerHTML;
-
+  console.log(starRating);
   if (checkbox.checked) {
-    filterbyBrand(starRating);
+    filterbyRating(starRating);
   } else {
-    removeBrandFilter(starRating);
+    removeBrandRating(starRating);
+  }
+}
+
+let temp = [];
+
+function filterbyRating(starRating) {
+  wholeArr.forEach((element) => {
+    if (starRating === "4★ &amp; above") {
+      if (element.rating.average > 4) {
+        temp.push(element);
+      }
+    }
+    if (starRating === "3★ &amp; above") {
+      if (element.rating.average > 3) {
+        temp.push(element);
+      }
+    }
+  });
+  ratingArr = [...new Set(temp)];
+  wholeArr = [...ratingArr]
+  universalSortAndFilter(ratingArr, 3);
+}
+
+function removeBrandRating(starRating) {
+  let removeDeleted = [];
+  removeDeleted = ratingArr.filter((element) => {
+    if(starRating === "4★ &amp; above") {
+      if (element.rating.average >= 4) {
+          return element;
+      }
+    }
+    if (starRating === "3★ &amp; above") {
+      if ( element.rating.average > 3 && element.rating.average < 4) {
+        return element;
+      }
+    } 
+  })
+  ratingArr = [];
+  ratingArr = [...removeDeleted];
+  if(ratingArr.length === 0){
+    universalSortAndFilter(mainArr, 2)
+  }
+  else{
+    universalSortAndFilter(ratingArr, 2)
   }
 }
 
@@ -664,10 +683,36 @@ function ramClicked(checkbox) {
   let checkedInner = checked.querySelector("div");
   let ram = checkedInner.innerHTML;
   if (checkbox.checked) {
-    filterbyBrand(ram);
+    filterbyRam(ram);
   } else {
-    removeBrandFilter(ram);
+    removeRam(ram);
   }
 }
 
+function filterbyRam(ram){
+  wholeArr.forEach((element,index) => {
+    if((element.subTitle.slice(0,1)) === (ram.slice(0,1))){
+      ramArr.push(element)
+    }
+  })
+  wholeArr= [...ramArr]
+  universalSortAndFilter(ramArr, 4)
+}
+
+function removeRam(ram){
+  let removeDeleted = [];
+  removeDeleted = ramArr.filter((element) => {
+    return (element.subTitle.slice(0,1)) !== (ram.slice(0,1))
+  });
+
+  ramArr = [];
+  ramArr = [...removeDeleted];
+console.log(ramArr.length)
+  if(ramArr.length === 0){
+    universalSortAndFilter(mainArr, 4);
+  }
+  else{
+    universalSortAndFilter(ramArr, 4)
+  }
+}
 
